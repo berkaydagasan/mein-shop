@@ -1,70 +1,111 @@
 {
-  "general": {
-    "404": "Not found",
-    "article": "Article",
-    "block": "Block",
-    "blog": "Blog",
-    "cart": "Cart",
-    "collection": "Collection",
-    "collections": "Collections",
-    "collection_card": "Collection card",
-    "collections_grid": "Collections grid",
-    "colors": "Colors",
-    "column": "Column",
-    "container": "Container",
-    "content": "Content",
-    "fonts": "Fonts",
-    "footer": "Footer",
-    "group": "Group",
-    "header": "Header",
-    "hello_world": "Hello world",
-    "layout": "Layout",
-    "liquid_tips": "Liquid tips",
-    "main": "Main",
-    "page": "Page",
-    "password": "Password",
-    "primary": "Primary",
-    "product": "Product",
-    "row": "Row",
-    "search": "Search",
-    "secondary": "Secondary",
-    "settings": "Settings",
-    "sidebar": "Sidebar",
-    "theme": "Theme",
-    "typography": "Typography"
+  "settings": {
+    "color_scheme": "Color scheme",
+    "colors": {
+      "name": "Colors",
+      "surfaces": "Surfaces",
+      "background": "Background",
+      "surface": "Surface",
+      "surface_info": "Used for cards, product images and highlights.",
+      "background_gradient": "Background gradient",
+      "background_gradient_info": "Optional. Replaces the background color – check text contrast.",
+      "typography": "Text",
+      "text": "Text",
+      "text_muted": "Muted text",
+      "contrast_info": "Keep at least 4.5:1 contrast against the background for accessibility.",
+      "accent": "Accent",
+      "accent_info": "Used for links and focus outlines. At least 4.5:1 contrast against the background.",
+      "buttons": "Buttons",
+      "button": "Primary button",
+      "button_label": "Primary button label",
+      "lines": "Lines",
+      "border": "Border (decorative)",
+      "border_strong": "Form field border",
+      "border_strong_info": "At least 3:1 contrast against the background.",
+      "status": "Status",
+      "sale": "Sale and errors",
+      "success": "Success"
+    },
+    "typography": {
+      "name": "Typography",
+      "info": "Fonts are served from the Shopify CDN. Every additional font weight adds loading time.",
+      "heading_font": "Heading font",
+      "heading_font_info": "Recommended: Archivo 600.",
+      "body_font": "Body and UI font",
+      "body_font_info": "Recommended: Inter 400. The 600 weight is added automatically for emphasis.",
+      "heading_case": "Heading case",
+      "case_normal": "Normal",
+      "case_uppercase": "Uppercase"
+    },
+    "buttons": {
+      "name": "Buttons",
+      "radius": "Button shape",
+      "radius_pill": "Pill",
+      "radius_rounded": "Rounded (8 px)",
+      "radius_square": "Square"
+    },
+    "layout": {
+      "name": "Layout",
+      "page_width": "Page width",
+      "page_width_default": "Default (1280 px)",
+      "page_width_wide": "Wide (1440 px)",
+      "section_spacing": "Spacing between sections",
+      "section_spacing_normal": "Normal",
+      "section_spacing_compact": "Compact",
+      "animations": "Enable scroll animations",
+      "animations_info": "Subtle reveal on scroll. Automatically disabled when visitors prefer reduced motion."
+    },
+    "shipping": {
+      "name": "Shipping",
+      "info": "These values only control what the theme displays. Actual shipping rates are set in Settings → Shipping and delivery – keep both in sync.",
+      "threshold": "Free shipping from (EUR)",
+      "threshold_info": "Currently applies to Germany only.",
+      "countries_note": "Delivery countries note"
+    }
   },
-  "labels": {
-    "alignment": "Alignment",
-    "background": "Background",
-    "foreground": "Foreground",
-    "grid_gap": "Grid spacing",
-    "grid_item_width": "Grid item width",
-    "input_corner_radius": "Input corner radius",
-    "layout_direction": "Layout direction",
-    "menu": "Menu",
-    "customer_account_menu": "Customer account menu",
-    "padding": "Padding",
-    "page_margin": "Page margin",
-    "page_width": "Page width",
-    "show_payment_icons": "Show payment icons"
-  },
-  "options": {
-    "alignment": {
-      "left": "Left",
-      "center": "Center",
-      "right": "Right"
+  "sections": {
+    "header": {
+      "name": "Header",
+      "menu": "Menu",
+      "customer_account_menu": "Customer account menu"
     },
-    "direction": {
-      "horizontal": "Horizontal",
-      "vertical": "Vertical"
+    "footer": {
+      "name": "Footer",
+      "menu": "Menu",
+      "show_payment_icons": "Show payment icons"
     },
-    "page_width": {
-      "narrow": "Narrow",
-      "wide": "Wide"
+    "main_product": {
+      "name": "Product page"
     },
-    "size": {
-      "large": "Large",
-      "small": "Small"
+    "main_collection": {
+      "name": "Collection"
+    },
+    "main_list_collections": {
+      "name": "Collections list"
+    },
+    "main_search": {
+      "name": "Search"
+    },
+    "main_cart": {
+      "name": "Cart"
+    },
+    "main_page": {
+      "name": "Page"
+    },
+    "main_404": {
+      "name": "404 page"
+    },
+    "main_blog": {
+      "name": "Blog"
+    },
+    "main_article": {
+      "name": "Article"
+    },
+    "main_password": {
+      "name": "Password page"
+    },
+    "styleguide": {
+      "name": "Styleguide (dev only)"
     }
   }
 }

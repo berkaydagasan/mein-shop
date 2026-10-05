@@ -1,0 +1,175 @@
+{% comment %}
+  Interim header (step 4): wordmark, main menu, search, account and cart.
+  Sticky behaviour, mobile drawer and logo upload follow in step 5.
+{% endcomment %}
+
+<header class="site-header color-{{ section.settings.color_scheme }}">
+  <div class="site-header__inner page-width">
+    <a class="site-header__logo" href="{{ routes.root_url }}">{{ shop.name }}</a>
+
+    {%- if section.settings.menu.links.size > 0 -%}
+      <nav class="site-header__nav" aria-label="{{ 'header.main_navigation' | t }}">
+        <ul class="site-header__menu" role="list">
+          {%- for link in section.settings.menu.links -%}
+            <li>
+              <a
+                class="site-header__link"
+                href="{{ link.url }}"
+                {% if link.current %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- link.title -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="site-header__icons">
+      <a class="icon-button" href="{{ routes.search_url }}">
+        {% render 'icon', name: 'search' %}
+        <span class="visually-hidden">{{ 'header.search' | t }}</span>
+      </a>
+
+      {%- if shop.customer_accounts_enabled -%}
+        <shopify-account menu="{{ section.settings.customer_account_menu }}" class="icon-button">
+          {% render 'icon', name: 'account' %}
+        </shopify-account>
+      {%- endif -%}
+
+      <a class="icon-button site-header__cart" href="{{ routes.cart_url }}">
+        {% render 'icon', name: 'cart' %}
+        <span class="visually-hidden">{{ 'header.cart_label' | t: count: cart.item_count }}</span>
+        {%- if cart.item_count > 0 -%}
+          <span class="site-header__cart-count" aria-hidden="true">
+            {%- if cart.item_count < 100 %}{{ cart.item_count }}{% else %}99+{% endif -%}
+          </span>
+        {%- endif -%}
+      </a>
+    </div>
+  </div>
+</header>
+
+{% stylesheet %}
+  .site-header {
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 var(--space-4);
+    min-height: var(--header-height);
+  }
+
+  .site-header__logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+    font-size: 1.375rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+
+  .site-header__nav {
+    order: 3;
+    width: 100%;
+  }
+
+  .site-header__menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-5);
+  }
+
+  .site-header__link {
+    display: inline-flex;
+    align-items: center;
+    min-width: var(--touch-target);
+    min-height: var(--touch-target);
+    font-size: var(--fs-small);
+    font-weight: var(--font-body-weight-bold);
+    text-decoration: none;
+  }
+
+  .site-header__link[aria-current='page'] {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.4em;
+  }
+
+  .site-header__icons {
+    display: flex;
+    align-items: center;
+    margin-inline-end: calc(var(--space-3) * -1);
+  }
+
+  .site-header__cart-count {
+    position: absolute;
+    top: 6px;
+    right: 4px;
+    display: grid;
+    place-items: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding-inline: 0.25rem;
+    border-radius: 999px;
+    background-color: var(--color-button);
+    color: var(--color-button-label);
+    font-size: 0.75rem;
+    font-weight: var(--font-body-weight-bold);
+    line-height: 1;
+  }
+
+  @media (min-width: 990px) {
+    .site-header__inner {
+      flex-wrap: nowrap;
+    }
+
+    .site-header__nav {
+      order: 0;
+      width: auto;
+    }
+
+    .site-header__link {
+      font-size: var(--fs-body);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "class": "section-header",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:sections.header.menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "customer_account_menu",
+      "label": "t:sections.header.customer_account_menu",
+      "default": "customer-account-main-menu"
+    }
+  ]
+}
+{% endschema %}

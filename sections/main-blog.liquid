@@ -1,0 +1,44 @@
+{% comment %}
+  Interim blog overview (step 4). Ratgeber layout with tag filter follows in step 10.
+{% endcomment %}
+
+<div class="section page-width stack" style="--stack-space: var(--space-7);">
+  <h1>{{ blog.title }}</h1>
+
+  {%- paginate blog.articles by 12 -%}
+    <ul class="grid" role="list" style="--cols-mobile: 1; --cols-tablet: 2; --cols-desktop: 3;">
+      {%- for article in blog.articles -%}
+        <li class="stack" style="--stack-space: var(--space-3);">
+          {% render 'image',
+            image: article.image,
+            url: article.url,
+            alt: '',
+            ratio: '3 / 2',
+            sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw',
+            max_width: 900,
+            widths: '300, 450, 600, 900',
+            placeholder: 'lifestyle-1'
+          %}
+          <h2 class="h3"><a class="link--plain" href="{{ article.url }}">{{ article.title }}</a></h2>
+          <p class="text-small text-muted">{{ article.published_at | time_tag: format: 'date' }}</p>
+          {%- if article.excerpt != blank -%}
+            <p>{{ article.excerpt | strip_html | truncatewords: 30 }}</p>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if paginate.pages > 1 -%}
+      <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
+        {{- paginate | default_pagination -}}
+      </nav>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_blog.name",
+  "settings": []
+}
+{% endschema %}

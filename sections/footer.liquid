@@ -1,0 +1,124 @@
+{% comment %}
+  Interim footer (step 4): menu, payment icons, price note, copyright.
+  Multi-column navigation, newsletter and cookie-settings link follow in step 5.
+{% endcomment %}
+
+<footer class="site-footer color-{{ section.settings.color_scheme }}">
+  <div class="site-footer__inner page-width">
+    {%- if section.settings.menu.links.size > 0 -%}
+      <nav aria-label="{{ 'footer.navigation' | t }}">
+        <ul class="site-footer__menu" role="list">
+          {%- for link in section.settings.menu.links -%}
+            <li><a class="site-footer__link" href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+      <div class="site-footer__payment">
+        <h2 class="visually-hidden">{{ 'footer.payment_methods' | t }}</h2>
+        <ul class="site-footer__payment-list" role="list">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'site-footer__payment-icon' }}</li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    <div class="site-footer__meta text-small">
+      <p>
+        {%- if shop.shipping_policy.url != blank -%}
+          {%- capture shipping_link -%}
+            <a href="{{ shop.shipping_policy.url }}">{{ 'footer.shipping_costs' | t }}</a>
+          {%- endcapture -%}
+          {{ 'footer.price_note_html' | t: link: shipping_link }}
+        {%- else -%}
+          {{ 'footer.price_note' | t }}
+        {%- endif -%}
+      </p>
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
+    </div>
+  </div>
+</footer>
+
+{% stylesheet %}
+  .site-footer {
+    margin-top: auto;
+    padding-block: var(--space-8) var(--space-6);
+  }
+
+  .site-footer__inner {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .site-footer__menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--space-5);
+  }
+
+  .site-footer__link {
+    display: inline-flex;
+    align-items: center;
+    min-width: var(--touch-target);
+    min-height: var(--touch-target);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .site-footer__link:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .site-footer__payment-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .site-footer__payment-icon {
+    width: 3rem;
+    height: auto;
+  }
+
+  .site-footer__meta {
+    display: grid;
+    gap: var(--space-2);
+    padding-top: var(--space-5);
+    border-top: var(--border-width) solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "class": "section-footer",
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:sections.footer.menu",
+      "default": "footer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "t:sections.footer.show_payment_icons",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

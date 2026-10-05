@@ -1,0 +1,72 @@
+{% comment %}
+  Interim article page (step 4). Related products/articles follow in step 10.
+{% endcomment %}
+
+<article class="section page-width page-width--narrow stack" style="--stack-space: var(--space-6);">
+  <header class="stack">
+    <h1>{{ article.title }}</h1>
+    <p class="text-small text-muted">
+      {%- assign date = article.published_at | time_tag: format: 'date' -%}
+      {{ 'blog.article_metadata_html' | t: date: date, author: article.author }}
+    </p>
+  </header>
+
+  {%- if article.image -%}
+    {% render 'image', image: article.image, ratio: '3 / 2', sizes: '(min-width: 800px) 768px, 100vw', lcp: true %}
+  {%- endif -%}
+
+  <div class="rte">{{ article.content }}</div>
+
+  {%- if blog.comments_enabled? -%}
+    <section id="comments" class="stack" aria-labelledby="CommentsHeading">
+      <h2 id="CommentsHeading" class="h3">{{ 'blog.article_comments' | t }}</h2>
+
+      {%- paginate article.comments by 10 -%}
+        {%- for comment in article.comments -%}
+          <div class="surface stack" style="--stack-space: var(--space-2); padding: var(--space-5);">
+            <p><strong>{{ comment.author }}</strong> · <span class="text-muted">{{ comment.created_at | time_tag: format: 'date' }}</span></p>
+            <div class="rte">{{ comment.content }}</div>
+          </div>
+        {%- endfor -%}
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
+            {{- paginate | default_pagination: anchor: 'comments' -}}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+
+      {%- form 'new_comment', article, class: 'stack' -%}
+        <h3 class="h4">{{ 'blog.comment_form_title' | t }}</h3>
+
+        {%- if form.errors -%}
+          <div class="form-message form-message--error" role="alert">{{ form.errors | default_errors }}</div>
+        {%- endif -%}
+
+        <div class="field">
+          <label for="CommentAuthor">{{ 'blog.comment_form_name' | t }}</label>
+          <input type="text" name="comment[author]" id="CommentAuthor" value="{{ form.author }}" autocomplete="name" required>
+        </div>
+
+        <div class="field">
+          <label for="CommentEmail">{{ 'blog.comment_form_email' | t }}</label>
+          <input type="email" name="comment[email]" id="CommentEmail" value="{{ form.email }}" autocomplete="email" required>
+        </div>
+
+        <div class="field">
+          <label for="CommentBody">{{ 'blog.comment_form_body' | t }}</label>
+          <textarea name="comment[body]" id="CommentBody" required>{{ form.body }}</textarea>
+        </div>
+
+        <p><button type="submit" class="button">{{ 'blog.comment_form_submit' | t }}</button></p>
+      {%- endform -%}
+    </section>
+  {%- endif -%}
+</article>
+
+{% schema %}
+{
+  "name": "t:sections.main_article.name",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,19 @@
+{% comment %}
+  404 page. Links to popular collections follow in step 10.
+{% endcomment %}
+
+<div class="section page-width page-width--narrow text-center stack">
+  <p class="eyebrow text-muted">404</p>
+  <h1>{{ 'templates.404.title' | t }}</h1>
+  <p class="lead text-muted">{{ 'templates.404.subtext' | t }}</p>
+  <p>
+    <a class="button" href="{{ routes.all_products_collection_url }}">{{ 'templates.404.back_to_shopping' | t }}</a>
+  </p>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_404.name",
+  "settings": []
+}
+{% endschema %}

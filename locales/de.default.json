@@ -1,0 +1,90 @@
+{
+  "general": {
+    "placeholder_image": "Platzhalterbild"
+  },
+  "accessibility": {
+    "skip_to_content": "Zum Inhalt springen",
+    "pagination": "Seitennavigation"
+  },
+  "header": {
+    "main_navigation": "Hauptnavigation",
+    "search": "Suche",
+    "cart_label": {
+      "one": "Warenkorb, {{ count }} Artikel",
+      "other": "Warenkorb, {{ count }} Artikel"
+    }
+  },
+  "footer": {
+    "navigation": "Footer-Navigation",
+    "payment_methods": "Zahlungsarten",
+    "price_note": "Alle Preise inkl. MwSt., zzgl. Versandkosten.",
+    "price_note_html": "Alle Preise inkl. MwSt., zzgl. {{ link }}.",
+    "shipping_costs": "Versandkosten"
+  },
+  "products": {
+    "add_to_cart": "In den Warenkorb",
+    "price_from": "ab {{ price }}",
+    "quantity": "Anzahl",
+    "regular_price": "Normalpreis",
+    "sale_price": "Angebotspreis",
+    "shipping_costs": "Versandkosten",
+    "sold_out": "Ausverkauft",
+    "tax_note": "inkl. MwSt., zzgl. Versandkosten",
+    "tax_note_html": "inkl. MwSt., zzgl. {{ link }}",
+    "variant": "Ausführung"
+  },
+  "collections": {
+    "title": "Kollektionen",
+    "empty": "Diese Kollektion enthält noch keine Produkte."
+  },
+  "search": {
+    "title": "Suche",
+    "label": "Suchbegriff",
+    "placeholder": "Produkte, Ratgeber oder Seiten suchen",
+    "submit": "Suchen",
+    "no_results_html": "Keine Ergebnisse für „{{ terms }}“ gefunden.",
+    "results_for_html": {
+      "one": "{{ count }} Ergebnis für „{{ terms }}“",
+      "other": "{{ count }} Ergebnisse für „{{ terms }}“"
+    }
+  },
+  "cart": {
+    "title": "Warenkorb",
+    "empty": "Dein Warenkorb ist leer.",
+    "continue_shopping": "Weiter einkaufen",
+    "quantity": "Anzahl",
+    "remove": "Entfernen",
+    "subtotal": "Zwischensumme",
+    "taxes_shipping_note": "Inkl. MwSt., zzgl. Versandkosten. Die Versandkosten werden im Checkout berechnet.",
+    "checkout": "Zur Kasse",
+    "update": "Warenkorb aktualisieren"
+  },
+  "templates": {
+    "404": {
+      "title": "Seite nicht gefunden",
+      "subtext": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+      "back_to_shopping": "Weiter einkaufen"
+    }
+  },
+  "blog": {
+    "article_comments": "Kommentare",
+    "article_metadata_html": "{{ date }} · von {{ author }}",
+    "comment_form_title": "Kommentar schreiben",
+    "comment_form_name": "Name",
+    "comment_form_email": "E-Mail",
+    "comment_form_body": "Kommentar",
+    "comment_form_submit": "Kommentar senden"
+  },
+  "password": {
+    "title": "Wir sind bald für dich da",
+    "password": "Passwort",
+    "enter": "Shop betreten"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Zu Apple Wallet hinzufügen",
+    "card": "Geschenkkarte",
+    "expired": "Diese Geschenkkarte ist abgelaufen.",
+    "expires_on": "Gültig bis {{ expires_on }}",
+    "use_at_checkout": "Löse diese Geschenkkarte im Checkout ein."
+  }
+}

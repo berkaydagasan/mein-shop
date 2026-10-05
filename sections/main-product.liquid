@@ -1,0 +1,153 @@
+{% comment %}
+  Interim product page (step 4). Full product page (gallery, variant
+  picker, compatibility, sticky add-to-cart) follows in step 8.
+{% endcomment %}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+<div class="section page-width">
+  <div class="product">
+    <div class="product__media">
+      {%- if product.images.size > 0 -%}
+        {%- for image in product.images -%}
+          {%- if forloop.first -%}
+            {% render 'image',
+              image: image,
+              ratio: '1 / 1',
+              fit: 'contain',
+              sizes: '(min-width: 990px) 50vw, 100vw',
+              lcp: true
+            %}
+          {%- else -%}
+            {% render 'image', image: image, ratio: '1 / 1', fit: 'contain', sizes: '(min-width: 990px) 50vw, 100vw' %}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {% render 'image', image: blank, ratio: '1 / 1', placeholder: 'product-1' %}
+      {%- endif -%}
+    </div>
+
+    <div class="product__info stack">
+      <h1>{{ product.title }}</h1>
+
+      <div>
+        <p class="product__price">
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
+            <span class="product__price--sale">{{ current_variant.price | money }}</span>
+            <span class="visually-hidden">{{ 'products.regular_price' | t }}</span>
+            <s class="text-muted">{{ current_variant.compare_at_price | money }}</s>
+          {%- else -%}
+            {{ current_variant.price | money }}
+          {%- endif -%}
+        </p>
+        <p class="text-small text-muted">
+          {%- if shop.shipping_policy.url != blank -%}
+            {%- capture shipping_link -%}
+              <a href="{{ shop.shipping_policy.url }}">{{ 'products.shipping_costs' | t }}</a>
+            {%- endcapture -%}
+            {{ 'products.tax_note_html' | t: link: shipping_link }}
+          {%- else -%}
+            {{ 'products.tax_note' | t }}
+          {%- endif -%}
+        </p>
+      </div>
+
+      {%- form 'product', product, class: 'product__form stack' -%}
+        {%- if product.has_only_default_variant -%}
+          <input type="hidden" name="id" value="{{ current_variant.id }}">
+        {%- else -%}
+          <div class="field">
+            <label for="Variant-{{ section.id }}">{{ 'products.variant' | t }}</label>
+            <select id="Variant-{{ section.id }}" name="id">
+              {%- for variant in product.variants -%}
+                <option
+                  value="{{ variant.id }}"
+                  {% if variant == current_variant %}
+                    selected
+                  {% endif %}
+                  {% unless variant.available %}
+                    disabled
+                  {% endunless %}
+                >
+                  {{ variant.title }} – {{ variant.price | money }}
+                  {%- unless variant.available %} ({{ 'products.sold_out' | t }}){% endunless -%}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+        {%- endif -%}
+
+        <div class="field product__quantity">
+          <label for="Quantity-{{ section.id }}">{{ 'products.quantity' | t }}</label>
+          <input id="Quantity-{{ section.id }}" type="number" name="quantity" min="1" value="1" inputmode="numeric">
+        </div>
+
+        <button
+          type="submit"
+          name="add"
+          class="button button--large button--full"
+          {% unless current_variant.available %}
+            disabled
+          {% endunless %}
+        >
+          {%- if current_variant.available -%}
+            {{ 'products.add_to_cart' | t }}
+          {%- else -%}
+            {{ 'products.sold_out' | t }}
+          {%- endif -%}
+        </button>
+
+        {{ form | payment_button }}
+      {%- endform -%}
+
+      {%- if product.description != blank -%}
+        <div class="rte">{{ product.description }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .product {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .product__media {
+    display: grid;
+    gap: var(--gap);
+  }
+
+  .product__price {
+    font-size: var(--fs-h3);
+    font-weight: var(--font-body-weight-bold);
+  }
+
+  .product__price--sale {
+    color: var(--color-sale);
+  }
+
+  .product__quantity input {
+    max-width: 8rem;
+  }
+
+  @media (min-width: 990px) {
+    .product {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .product__info {
+      position: sticky;
+      top: var(--space-6);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.main_product.name",
+  "settings": []
+}
+{% endschema %}

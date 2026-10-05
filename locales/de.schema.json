@@ -1,0 +1,111 @@
+{
+  "settings": {
+    "color_scheme": "Farbschema",
+    "colors": {
+      "name": "Farben",
+      "surfaces": "Flächen",
+      "background": "Hintergrund",
+      "surface": "Fläche",
+      "surface_info": "Für Karten, Produktbilder und Hervorhebungen.",
+      "background_gradient": "Hintergrund-Verlauf",
+      "background_gradient_info": "Optional. Ersetzt die Hintergrundfarbe als Fläche – Textkontrast prüfen.",
+      "typography": "Text",
+      "text": "Text",
+      "text_muted": "Text gedämpft",
+      "contrast_info": "Für Barrierefreiheit mindestens 4,5 : 1 Kontrast zum Hintergrund einhalten.",
+      "accent": "Akzent",
+      "accent_info": "Für Links und Fokus-Rahmen. Mindestens 4,5 : 1 Kontrast zum Hintergrund.",
+      "buttons": "Buttons",
+      "button": "Primär-Button",
+      "button_label": "Primär-Button Text",
+      "lines": "Linien",
+      "border": "Rahmen (dekorativ)",
+      "border_strong": "Rahmen Formularfelder",
+      "border_strong_info": "Mindestens 3 : 1 Kontrast zum Hintergrund.",
+      "status": "Status",
+      "sale": "Sale und Fehler",
+      "success": "Erfolg"
+    },
+    "typography": {
+      "name": "Typografie",
+      "info": "Schriften werden über das Shopify-CDN geladen. Jeder zusätzliche Schnitt kostet Ladezeit.",
+      "heading_font": "Schrift Überschriften",
+      "heading_font_info": "Empfohlen: Archivo 600.",
+      "body_font": "Schrift Fließtext und Bedienelemente",
+      "body_font_info": "Empfohlen: Inter 400. Der Schnitt 600 wird für Hervorhebungen automatisch ergänzt.",
+      "heading_case": "Schreibweise Überschriften",
+      "case_normal": "Normal",
+      "case_uppercase": "Großbuchstaben"
+    },
+    "buttons": {
+      "name": "Buttons",
+      "radius": "Button-Form",
+      "radius_pill": "Pill (rund)",
+      "radius_rounded": "Abgerundet (8 px)",
+      "radius_square": "Eckig"
+    },
+    "layout": {
+      "name": "Layout",
+      "page_width": "Seitenbreite",
+      "page_width_default": "Standard (1280 px)",
+      "page_width_wide": "Breit (1440 px)",
+      "section_spacing": "Abstand zwischen Abschnitten",
+      "section_spacing_normal": "Normal",
+      "section_spacing_compact": "Kompakt",
+      "animations": "Scroll-Animationen aktivieren",
+      "animations_info": "Dezentes Einblenden beim Scrollen. Wird automatisch deaktiviert, wenn Besucher „Bewegung reduzieren“ eingestellt haben."
+    },
+    "shipping": {
+      "name": "Versand",
+      "info": "Diese Werte steuern nur die Anzeige im Theme. Die tatsächlichen Versandkosten legst du unter Einstellungen → Versand und Zustellung fest – bitte beide Stellen synchron halten.",
+      "threshold": "Gratisversand ab (EUR)",
+      "threshold_info": "Gilt aktuell nur für Deutschland.",
+      "countries_note": "Hinweis Lieferländer"
+    }
+  },
+  "sections": {
+    "header": {
+      "name": "Header",
+      "menu": "Menü",
+      "customer_account_menu": "Kundenkonto-Menü"
+    },
+    "footer": {
+      "name": "Footer",
+      "menu": "Menü",
+      "show_payment_icons": "Zahlungsarten anzeigen"
+    },
+    "main_product": {
+      "name": "Produktseite"
+    },
+    "main_collection": {
+      "name": "Kollektion"
+    },
+    "main_list_collections": {
+      "name": "Kollektionsübersicht"
+    },
+    "main_search": {
+      "name": "Suche"
+    },
+    "main_cart": {
+      "name": "Warenkorb"
+    },
+    "main_page": {
+      "name": "Seite"
+    },
+    "main_404": {
+      "name": "404-Seite"
+    },
+    "main_blog": {
+      "name": "Blog"
+    },
+    "main_article": {
+      "name": "Artikel"
+    },
+    "main_password": {
+      "name": "Passwortseite"
+    },
+    "styleguide": {
+      "name": "Styleguide (Entwicklung)"
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{% comment %}
+  Interim search page (step 4).
+{% endcomment %}
+
+<div class="section page-width stack" style="--stack-space: var(--space-7);">
+  <div class="stack">
+    <h1>{{ 'search.title' | t }}</h1>
+
+    <form class="search-form" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="visually-hidden" for="Search-{{ section.id }}">{{ 'search.label' | t }}</label>
+      <input
+        id="Search-{{ section.id }}"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'search.placeholder' | t }}"
+        autocomplete="off"
+      >
+      <button type="submit" class="button">
+        {% render 'icon', name: 'search' %}
+        <span>{{ 'search.submit' | t }}</span>
+      </button>
+    </form>
+  </div>
+
+  {%- if search.performed -%}
+    {%- if search.results_count == 0 -%}
+      <p>{{ 'search.no_results_html' | t: terms: search.terms }}</p>
+    {%- else -%}
+      <p class="text-muted" role="status">{{ 'search.results_for_html' | t: terms: search.terms, count: search.results_count }}</p>
+
+      {%- paginate search.results by 24 -%}
+        <ul class="grid" role="list" style="--cols-mobile: 2; --cols-tablet: 3; --cols-desktop: 4;">
+          {%- for result in search.results -%}
+            {%- assign featured_image = result.featured_image | default: result.image -%}
+            <li class="stack" style="--stack-space: var(--space-2);">
+              {% render 'image',
+                image: featured_image,
+                url: result.url,
+                ratio: '1 / 1',
+                fit: 'contain',
+                sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+                max_width: 800,
+                widths: '200, 300, 400, 600, 800'
+              %}
+              <h2 class="h4"><a class="link--plain" href="{{ result.url }}">{{ result.title }}</a></h2>
+              {%- if result.object_type == 'product' -%}
+                <p>{{ result.price | money }}</p>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
+            {{- paginate | default_pagination -}}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .search-form {
+    display: flex;
+    gap: var(--space-2);
+    max-width: 40rem;
+  }
+
+  .search-form input {
+    flex: 1;
+    min-width: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.main_search.name",
+  "settings": []
+}
+{% endschema %}

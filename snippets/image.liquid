@@ -1,49 +1,84 @@
 {% doc %}
-  Renders a responsive image that might be wrapped in a link.
+  Renders a responsive image from the Shopify CDN (WebP/AVIF served
+  automatically) with srcset, sizes and a fixed aspect ratio to avoid
+  layout shifts. Falls back to a clearly labelled placeholder SVG when no
+  image is set.
 
-  When `width`, `height` and `crop` are provided, the image will be rendered
-  with a fixed aspect ratio.
+  Loading: lazy by default. Pass `lcp: true` for the largest above-the-fold
+  image (hero, first product image) – it is then loaded eagerly with
+  fetchpriority="high" and preloaded. Use lcp on at most one image per page.
 
-  Serves as an example of how to use the `image_url` filter and `image_tag` filter
-  as well as how you can use LiquidDoc to document your code.
-
-  @param {image} image - The image to be rendered
-  @param {string} [url] - An optional destination URL for the image
-  @param {string} [class] - Optional class to be added to the image wrapper
-  @param {number} [width] - The highest resolution width of the image to be rendered
-  @param {number} [height] - The highest resolution height of the image to be rendered
-  @param {string} [crop] - The crop position of the image
+  @param {image} [image] - The image to render; placeholder when blank
+  @param {string} [url] - Optional link target; wraps the image in <a>
+  @param {string} [class] - Additional classes for the wrapper
+  @param {string} [alt] - Alt text override; defaults to the image's alt text. Pass '' for decorative images
+  @param {string} [sizes] - The sizes attribute. Default: '100vw'
+  @param {string} [widths] - Comma-separated srcset widths
+  @param {number} [max_width] - Largest image width requested from the CDN. Default: 2400
+  @param {string} [ratio] - CSS aspect ratio, e.g. '1 / 1' or '4 / 5'. Default: the image's own ratio
+  @param {string} [fit] - 'cover' (default) or 'contain' (packshots)
+  @param {boolean} [lcp] - Load eagerly with high priority and preload
+  @param {string} [placeholder] - Placeholder SVG name, e.g. 'product-1', 'lifestyle-1'. Default: 'image'
 
   @example
-  {% render 'image', image: product.featured_image %}
-  {% render 'image', image: product.featured_image, url: product.url %}
-  {% render 'image',
-    class: 'product__image',
-    image: product.featured_image,
-    url: product.url,
-    width: 1200,
-    height: 800,
-    crop: 'center',
-  %}
+  {% render 'image', image: product.featured_image, ratio: '1 / 1', fit: 'contain', sizes: '(min-width: 990px) 25vw, 50vw' %}
+  {% render 'image', image: section.settings.image, lcp: true, sizes: '100vw', placeholder: 'lifestyle-1' %}
 {% enddoc %}
 
-{% liquid
-  unless height
-    assign width = width | default: image.width
-  endunless
+{%- liquid
+  assign max_width = max_width | default: 2400
+  assign sizes = sizes | default: '100vw'
+  assign widths = widths | default: '375, 550, 750, 1100, 1500, 1800, 2400'
+  assign fit = fit | default: 'cover'
+  assign placeholder = placeholder | default: 'image'
+
+  if lcp
+    assign loading = 'eager'
+    assign fetchpriority = 'high'
+  else
+    assign loading = 'lazy'
+    assign fetchpriority = 'auto'
+  endif
+
+  if alt == nil
+    assign alt_text = image.alt | default: ''
+  else
+    assign alt_text = alt
+  endif
+
+  if image.presentation.focal_point
+    assign object_position = 'object-position: ' | append: image.presentation.focal_point
+  endif
 
   if url
     assign wrapper = 'a'
   else
     assign wrapper = 'div'
   endif
-%}
+-%}
 
 <{{ wrapper }}
-  class="image {{ class }}"
+  class="media{% if class != blank %} {{ class }}{% endif %}"
+  style="{% if ratio != blank %}--ratio: {{ ratio }};{% endif %} --fit: {{ fit }};"
   {% if url %}
     href="{{ url }}"
   {% endif %}
 >
-  {{ image | image_url: width: width, height: height, crop: crop | image_tag }}
+  {%- if image != blank -%}
+    {{
+      image
+      | image_url: width: max_width
+      | image_tag:
+        widths: widths,
+        sizes: sizes,
+        loading: loading,
+        fetchpriority: fetchpriority,
+        preload: lcp,
+        alt: alt_text,
+        style: object_position
+    }}
+  {%- else -%}
+    {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
+    <span class="badge badge--muted placeholder-label">{{ 'general.placeholder_image' | t }}</span>
+  {%- endif -%}
 </{{ wrapper }}>

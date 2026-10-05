@@ -1,0 +1,205 @@
+{% comment %}
+  DEV ONLY – design-system styleguide for checking tokens in the preview.
+  Temporarily used on the home page (step 4); replaced by the real home
+  page in step 6 and deleted before launch. Not available in the editor's
+  "add section" list (no presets).
+{% endcomment %}
+
+{%- assign icon_names = 'menu,close,search,account,cart,chevron-down,chevron-up,chevron-left,chevron-right,arrow-right,plus,minus,check,info,alert,truck,return,lock,mail,credit-card,shield-check,car,ruler,wrench,lightbulb,palette,plug,sparkle' | split: ',' -%}
+
+<div class="styleguide">
+  {%- comment -%} Intro / typography on light {%- endcomment -%}
+  <section class="section color-scheme-1">
+    <div class="page-width stack" style="--stack-space: var(--space-5);">
+      <p class="eyebrow text-muted">Entwickler-Styleguide · wird in Schritt 6 durch die Startseite ersetzt</p>
+      <h1 class="h-display">Ambientebeleuchtung für dein Auto</h1>
+      <p class="lead text-muted measure">
+        Lead-Text: LED-Lichtsets für den Innenraum, mit verständlicher Einbauanleitung zum Selbsteinbau. [PLATZHALTER]
+      </p>
+      <p class="measure">
+        Fließtext in Inter 400 mit 1,6 Zeilenhöhe und maximal 65 Zeichen Zeilenlänge. Ein
+        <a href="#">Link im Fließtext</a> ist immer unterstrichen. <strong>Hervorhebung in Inter 600.</strong>
+        <small class="text-muted">Kleiner Text mit 14 px, z. B. inkl. MwSt., zzgl. Versandkosten.</small>
+      </p>
+      <div class="styleguide__type stack" style="--stack-space: var(--space-3);">
+        <h2 class="h1">H1 – Archivo 600</h2>
+        <h2>H2 – Beliebte Ambiente-Lichtsets</h2>
+        <h3>H3 – Produkt- und Kartentitel</h3>
+        <h4>H4 – Kleine Überschrift</h4>
+      </div>
+      <p class="h2">Silbentrennungstest: Ambientebeleuchtungsnachrüstsatz</p>
+    </div>
+  </section>
+
+  {%- comment -%} Buttons, badges, icons on light surface {%- endcomment -%}
+  <section class="section color-scheme-2">
+    <div class="page-width stack" style="--stack-space: var(--space-6);">
+      <h2>Buttons, Badges, Icons</h2>
+
+      <div class="styleguide__row">
+        <a class="button" href="#">Primär</a>
+        <a class="button button--secondary" href="#">Sekundär</a>
+        <a class="button button--large" href="#">Groß (56 px)</a>
+        <a class="button button--link" href="#">Alle ansehen {% render 'icon', name: 'arrow-right' %}</a>
+        <button class="button" type="button" disabled>Deaktiviert</button>
+        <button class="button" type="button" aria-busy="true">Lädt</button>
+      </div>
+
+      <div class="styleguide__row">
+        <span class="badge">Neu</span>
+        <span class="badge badge--sale">Sale</span>
+        <span class="badge badge--muted">Ausverkauft</span>
+      </div>
+
+      <ul class="styleguide__icons" role="list">
+        {%- for icon_name in icon_names -%}
+          <li>
+            {% render 'icon', name: icon_name %}
+            <span class="text-small text-muted">{{ icon_name }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </section>
+
+  {%- comment -%} Forms {%- endcomment -%}
+  <section class="section color-scheme-1">
+    <div class="page-width page-width--narrow stack" style="--stack-space: var(--space-5);">
+      <h2>Formulare</h2>
+      <div class="field">
+        <label for="sg-name">Name</label>
+        <input id="sg-name" type="text" placeholder="Max Mustermann" autocomplete="off" aria-describedby="sg-name-hint">
+        <p id="sg-name-hint" class="field__hint">Hinweistext unter dem Feld.</p>
+      </div>
+      <div class="field">
+        <label for="sg-email">E-Mail</label>
+        <input id="sg-email" type="email" value="keine-email" aria-invalid="true" aria-describedby="sg-email-error" autocomplete="off">
+        <p id="sg-email-error" class="field__error">{% render 'icon', name: 'alert', class: 'styleguide__error-icon' %} Bitte gib eine gültige E-Mail-Adresse ein.</p>
+      </div>
+      <div class="field">
+        <label for="sg-select">Lichtfarbe</label>
+        <select id="sg-select">
+          <option>Warmweiß</option>
+          <option>Kaltweiß</option>
+          <option>Mehrfarbig (RGB)</option>
+        </select>
+      </div>
+      <label class="choice"><input type="checkbox" checked> Ja, ich möchte den Newsletter erhalten.</label>
+    </div>
+  </section>
+
+  {%- comment -%} Dark scheme with glow – hero/story/CTA preview {%- endcomment -%}
+  <section class="section color-scheme-3 glow">
+    <div class="page-width stack" style="--stack-space: var(--space-5);">
+      <p class="eyebrow" style="color: var(--color-accent);">Dunkles Schema · Hero, Story, Final CTA</p>
+      <h2 class="h1">Licht, das zu deinem Auto passt</h2>
+      <p class="lead text-muted measure">Gedämpfter Text auf Dunkel mit 8,46 : 1 Kontrast. <a href="#">Link auf Dunkel</a>.</p>
+      <div class="styleguide__row">
+        <a class="button button--large" href="#">Lichtsets entdecken</a>
+        <a class="button button--secondary button--large" href="#">Einbau &amp; Kompatibilität</a>
+      </div>
+      <div class="grid" style="--cols-mobile: 1; --cols-tablet: 3;">
+        {%- for i in (1..3) -%}
+          <div class="surface reveal stack" style="--stack-space: var(--space-2); padding: var(--space-5);">
+            {% render 'icon', name: 'sparkle' %}
+            <h3 class="h4">Scroll-Reveal {{ i }}</h3>
+            <p class="text-small text-muted">Blendet beim Scrollen ein – ohne JavaScript, aus bei „Bewegung reduzieren“.</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+
+  {%- comment -%} Color schemes and image ratios {%- endcomment -%}
+  <section class="section color-scheme-1">
+    <div class="page-width stack" style="--stack-space: var(--space-6);">
+      <h2>Farbschemata</h2>
+      <div class="grid" style="--cols-mobile: 1; --cols-tablet: 3;">
+        {%- for scheme in settings.color_schemes -%}
+          <div class="color-{{ scheme.id }} styleguide__scheme stack" style="--stack-space: var(--space-3);">
+            <p class="h4">{{ scheme.id }}</p>
+            <ul class="styleguide__swatches" role="list">
+              <li><span style="background: var(--color-surface);"></span>Fläche</li>
+              <li><span style="background: var(--color-text);"></span>Text</li>
+              <li><span style="background: var(--color-text-muted);"></span>Gedämpft</li>
+              <li><span style="background: var(--color-accent);"></span>Akzent</li>
+              <li><span style="background: var(--color-button);"></span>Button</li>
+              <li><span style="background: var(--color-sale);"></span>Sale</li>
+            </ul>
+            <p><a class="button" href="#">Button</a></p>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <h2>Bildverhältnisse (Platzhalter)</h2>
+      <div class="grid" style="--cols-mobile: 2; --cols-desktop: 4;">
+        {% render 'image', image: blank, ratio: '1 / 1', placeholder: 'product-1' %}
+        {% render 'image', image: blank, ratio: '4 / 5', placeholder: 'product-2' %}
+        {% render 'image', image: blank, ratio: '3 / 2', placeholder: 'lifestyle-1' %}
+        {% render 'image', image: blank, ratio: '16 / 9', placeholder: 'lifestyle-2' %}
+      </div>
+    </div>
+  </section>
+</div>
+
+{% stylesheet %}
+  .styleguide__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .styleguide__icons {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    gap: var(--space-3);
+  }
+
+  .styleguide__icons li {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-2);
+    border-radius: var(--radius-m);
+    background-color: var(--color-bg);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .styleguide__error-icon {
+    --icon-size: 1.125rem;
+  }
+
+  .styleguide__scheme {
+    padding: var(--space-5);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+  }
+
+  .styleguide__swatches {
+    display: grid;
+    gap: var(--space-2);
+    font-size: var(--fs-small);
+  }
+
+  .styleguide__swatches li {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .styleguide__swatches span {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: var(--radius-s);
+    border: var(--border-width) solid var(--color-border);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.styleguide.name",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,72 @@
+{% comment %}
+  Interim collection page (step 4). Product cards, filters and sorting
+  follow in step 7.
+{% endcomment %}
+
+<div class="section page-width stack" style="--stack-space: var(--space-7);">
+  <div class="stack">
+    <h1>{{ collection.title }}</h1>
+    {%- if collection.description != blank -%}
+      <div class="rte text-muted">{{ collection.description }}</div>
+    {%- endif -%}
+  </div>
+
+  {%- paginate collection.products by 24 -%}
+    {%- if collection.products.size > 0 -%}
+      <ul class="grid" role="list" style="--cols-mobile: 2; --cols-tablet: 3; --cols-desktop: 4;">
+        {%- for product in collection.products -%}
+          <li class="collection-item">
+            {% render 'image',
+              image: product.featured_image,
+              url: product.url,
+              ratio: '1 / 1',
+              fit: 'contain',
+              sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw',
+              max_width: 800,
+              widths: '200, 300, 400, 600, 800',
+              placeholder: 'product-1'
+            %}
+            <h2 class="h4 collection-item__title">
+              <a class="link--plain" href="{{ product.url }}">{{ product.title }}</a>
+            </h2>
+            <p>
+              {%- if product.price_varies -%}
+                {%- assign price_min = product.price_min | money -%}
+                {{ 'products.price_from' | t: price: price_min }}
+              {%- else -%}
+                {{ product.price | money }}
+              {%- endif -%}
+            </p>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <p class="text-muted">{{ 'collections.empty' | t }}</p>
+    {%- endif -%}
+
+    {%- if paginate.pages > 1 -%}
+      <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
+        {{- paginate | default_pagination -}}
+      </nav>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% stylesheet %}
+  .collection-item {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+  }
+
+  .collection-item__title {
+    margin-top: var(--space-2);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.main_collection.name",
+  "settings": []
+}
+{% endschema %}

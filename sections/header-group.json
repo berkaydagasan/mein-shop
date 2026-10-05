@@ -1,0 +1,15 @@
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "menu": "main-menu",
+        "customer_account_menu": "customer-account-main-menu"
+      }
+    }
+  },
+  "order": ["header"]
+}

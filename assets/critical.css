@@ -1,16 +1,30 @@
-/** Critical CSS for the theme. This file is included on every page. */
+/**
+ * carbiente – critical CSS, included on every page.
+ * Design tokens live in snippets/css-variables.liquid.
+ * Component styles live in their section/snippet via {% stylesheet %}.
+ *
+ * 1. Reset          6. Layout          11. Badges
+ * 2. Base           7. Buttons         12. Utilities
+ * 3. Color schemes  8. Forms           13. Pagination
+ * 4. Typography     9. Media & icons   14. Motion
+ * 5. Links & focus 10. Rich text
+ */
 
-/* Reset styles inspired by https://www.joshwcomeau.com/css/custom-css-reset/ */
-* {
+/* 1. Reset ---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+* {
   margin: 0;
 }
 
-body {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  min-height: 100svh;
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-height) + var(--space-4));
 }
 
 html:has(dialog[scroll-lock][open], details[scroll-lock][open]) {
@@ -24,30 +38,74 @@ canvas,
 svg {
   display: block;
   max-width: 100%;
+}
+
+img,
+video {
   height: auto;
 }
 
 input,
+button,
 textarea,
 select {
   font: inherit;
-  border-radius: var(--style-border-radius-inputs);
+  color: inherit;
 }
 
-select {
-  background-color: var(--color-background);
-  color: currentcolor;
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
-dialog {
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+  padding: 0;
 }
 
-p {
-  text-wrap: pretty;
+table {
+  border-collapse: collapse;
 }
+
+[hidden] {
+  display: none !important;
+}
+
+/* 2. Base ----------------------------------------------------------------- */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  font-family: var(--font-body-family);
+  font-weight: var(--font-body-weight);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (min-width: 990px) {
+  :root {
+    --fs-body: 1.0625rem;
+    --header-height: 4.75rem;
+  }
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* Long German compounds must never cause horizontal scrolling */
 p,
+li,
+dd,
+blockquote,
+figcaption,
 h1,
 h2,
 h3,
@@ -57,62 +115,629 @@ h6 {
   overflow-wrap: break-word;
 }
 
-p:empty {
-  display: none;
+p {
+  text-wrap: pretty;
 }
 
-:is(p, h1, h2, h3, h4, h5, h6):first-child,
-:empty:first-child + :where(p, h1, h2, h3, h4, h5, h6) {
-  margin-block-start: 0;
+/* 3. Color schemes -------------------------------------------------------- */
+[class*='color-scheme-'] {
+  background-color: var(--color-bg);
+  background-image: var(--gradient-bg);
+  color: var(--color-text);
 }
 
-:is(p, h1, h2, h3, h4, h5, h6):last-child,
-:where(p, h1, h2, h3, h4, h5, h6) + :has(+ :empty:last-child) {
-  margin-block-end: 0;
+/* 4. Typography ----------------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+.h-display,
+.h1,
+.h2,
+.h3,
+.h4 {
+  font-family: var(--font-heading-family);
+  font-weight: var(--font-heading-weight);
+  line-height: var(--lh-heading);
+  letter-spacing: -0.015em;
+  text-transform: var(--font-heading-case);
+  text-wrap: balance;
+  hyphens: auto;
 }
 
-/** Theme styles below */
-body {
-  font-family: var(--font-primary--family);
-  background-color: var(--color-background);
-  color: var(--color-foreground);
+.h-display {
+  font-size: var(--fs-display);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
 }
 
-/** Block container layout utilities */
+h1,
+.h1 {
+  font-size: var(--fs-h1);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.02em;
+}
 
-/**
- * Setup a grid that enables both full-width and constrained layouts
- * depending on the class of the child elements.
- *
- * By default, a minimum content margin is set on the left and right
- * sides of the container and the content is centered in the viewport
- * to not exceed the maximum page width.
- *
- * When a child element is given the `full-width` class, it will span
- * the entire viewport.
- */
-.block-container {
-  --content-width: min(
-    calc(var(--page-width) - var(--page-margin) * 2),
-    calc(100% - var(--page-margin) * 2)
-  );
-  --content-margin: minmax(var(--page-margin), 1fr);
-  --content-grid: var(--content-margin) var(--content-width) var(--content-margin);
+h2,
+.h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.15;
+}
 
-  /* This is required to make <img> elements work as background images */
-  position: relative;
-  grid-template-columns: var(--content-grid);
+h3,
+.h3 {
+  font-size: var(--fs-h3);
+  line-height: 1.25;
+}
+
+h4,
+.h4 {
+  font-size: var(--fs-h4);
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.lead {
+  font-size: var(--fs-lead);
+  line-height: 1.5;
+}
+
+.eyebrow {
+  font-family: var(--font-body-family);
+  font-size: var(--fs-small);
+  font-weight: var(--font-body-weight-bold);
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+small,
+.text-small {
+  font-size: var(--fs-small);
+  line-height: 1.5;
+}
+
+strong,
+b {
+  font-weight: var(--font-body-weight-bold);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+.measure {
+  max-width: var(--measure);
+}
+
+/* Vertical rhythm: .stack > * + * gets a consistent top margin */
+.stack > * + * {
+  margin-block-start: var(--stack-space, var(--space-4));
+}
+
+/* 5. Links & focus -------------------------------------------------------- */
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.link {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+.link--plain {
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  a:hover,
+  .link:hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .link--plain:hover {
+    text-decoration: underline;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 1000;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-target);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-button);
+  background: var(--color-button);
+  color: var(--color-button-label);
+  font-weight: var(--font-body-weight-bold);
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* 6. Layout --------------------------------------------------------------- */
+.page-width {
+  width: 100%;
+  max-width: calc(var(--page-width) + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.page-width--wide {
+  max-width: calc(var(--page-width-wide) + var(--gutter) * 2);
+}
+
+.page-width--narrow {
+  max-width: calc(48rem + var(--gutter) * 2);
+}
+
+.section {
+  padding-block: var(--section-y);
+}
+
+/* Responsive grid: set --cols-mobile / --cols-tablet / --cols-desktop inline */
+.grid {
   display: grid;
-  text-align: var(--text-align, left);
+  gap: var(--gap);
+  grid-template-columns: repeat(var(--cols-mobile, 1), minmax(0, 1fr));
+}
+
+@media (min-width: 750px) {
+  .grid {
+    grid-template-columns: repeat(var(--cols-tablet, var(--cols-mobile, 1)), minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 990px) {
+  .grid {
+    grid-template-columns: repeat(var(--cols-desktop, var(--cols-tablet, var(--cols-mobile, 1))), minmax(0, 1fr));
+  }
+}
+
+/* Components respond to their own width via container queries */
+.cq {
+  container-type: inline-size;
+}
+
+/* 7. Buttons -------------------------------------------------------------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--touch-target);
+  padding: 0.75rem 1.5rem;
+  border: 1.5px solid var(--color-button);
+  border-radius: var(--radius-button);
+  background-color: var(--color-button);
+  color: var(--color-button-label);
+  font-family: var(--font-body-family);
+  font-size: 1rem;
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.button--secondary {
+  border-color: currentcolor;
+  background-color: transparent;
+  color: var(--color-text);
+}
+
+.button--large {
+  min-height: 3.5rem;
+  padding-inline: 2rem;
+  font-size: 1.0625rem;
+}
+
+.button--full {
   width: 100%;
 }
 
-/* Child elements, by default, are constrained to the central column of the grid. */
-.block-container > * {
-  grid-column: 2;
+/* Text button with arrow, e.g. "Alle ansehen" */
+.button--link {
+  min-height: var(--touch-target);
+  padding-inline: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
 }
 
-/* Child elements that use the full-width utility class span the entire viewport. */
-.block-container > .full-width {
-  grid-column: 1 / -1;
+.button--link .icon {
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .button:hover {
+    background-color: color-mix(in srgb, var(--color-button) 82%, var(--color-bg));
+    border-color: color-mix(in srgb, var(--color-button) 82%, var(--color-bg));
+  }
+
+  .button--secondary:hover {
+    background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
+    border-color: currentcolor;
+  }
+
+  .button--link:hover {
+    background: none;
+    text-decoration: underline;
+  }
+
+  .button--link:hover .icon {
+    transform: translateX(4px);
+  }
+}
+
+.button:active {
+  transform: scale(0.98);
+}
+
+.button:disabled,
+.button[aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading state: <button aria-busy="true"> */
+.button[aria-busy='true'] {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.button[aria-busy='true']::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: auto;
+  border: 2px solid var(--color-button-label);
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Square icon-only button with a 48px hit area */
+.icon-button {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  border-radius: 50%;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .icon-button:hover {
+    background-color: color-mix(in srgb, var(--color-text) 8%, transparent);
+  }
+}
+
+/* 8. Forms ---------------------------------------------------------------- */
+.field {
+  display: grid;
+  gap: var(--space-2);
+}
+
+label,
+.label {
+  font-size: var(--fs-small);
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1.4;
+}
+
+:where(
+    input:not([type='checkbox'], [type='radio'], [type='submit'], [type='button'], [type='hidden'], [type='image'], [type='range'], [type='color'], [type='file']),
+    select,
+    textarea
+  ) {
+  width: 100%;
+  min-height: var(--touch-target);
+  padding: 0.6875rem 1rem;
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-s);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 1rem; /* >= 16px prevents iOS zoom on focus */
+  line-height: 1.5;
+}
+
+textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+@media (hover: hover) {
+  :where(input, select, textarea):hover {
+    border-color: var(--color-text);
+  }
+}
+
+:where(input, select, textarea)[aria-invalid='true'] {
+  border-color: var(--color-sale);
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  accent-color: var(--color-accent);
+}
+
+/* Checkbox/radio with label: the whole row is the 48px touch target */
+.choice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--touch-target);
+  font-size: var(--fs-body);
+  font-weight: var(--font-body-weight);
+  cursor: pointer;
+}
+
+.field__hint {
+  color: var(--color-text-muted);
+  font-size: var(--fs-small);
+}
+
+.field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  color: var(--color-sale);
+  font-size: var(--fs-small);
+}
+
+.form-message {
+  padding: var(--space-4);
+  border-radius: var(--radius-s);
+  border: var(--border-width) solid currentcolor;
+  font-size: var(--fs-small);
+}
+
+.form-message--error {
+  color: var(--color-sale);
+}
+
+.form-message--success {
+  color: var(--color-success);
+}
+
+/* 9. Media & icons -------------------------------------------------------- */
+.media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: var(--ratio, auto);
+  border-radius: var(--radius-m);
+  background-color: var(--color-surface);
+}
+
+.media > img,
+.media > picture,
+.media > picture > img,
+.media > video,
+.media > .placeholder-svg {
+  width: 100%;
+  height: 100%;
+  object-fit: var(--fit, cover);
+}
+
+.placeholder-svg {
+  background-color: var(--color-surface);
+  fill: color-mix(in srgb, var(--color-text) 22%, transparent);
+}
+
+.placeholder-label {
+  position: absolute;
+  inset-block-end: var(--space-3);
+  inset-inline-start: var(--space-3);
+}
+
+.icon {
+  width: var(--icon-size, 1.5rem);
+  height: var(--icon-size, 1.5rem);
+  flex-shrink: 0;
+}
+
+/* 10. Rich text (content from the admin editor) ---------------------------- */
+.rte {
+  max-width: var(--measure);
+}
+
+.rte > * + * {
+  margin-block-start: 1em;
+}
+
+.rte > :is(h2, h3, h4) {
+  margin-block-start: 1.5em;
+}
+
+.rte :is(ul, ol) {
+  padding-inline-start: 1.25em;
+}
+
+.rte a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.rte img {
+  border-radius: var(--radius-m);
+}
+
+.rte table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.rte :is(th, td) {
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width) solid var(--color-border);
+  text-align: start;
+}
+
+/* 11. Badges -------------------------------------------------------------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: 0 0.625rem;
+  border-radius: var(--radius-s);
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  font-size: var(--fs-small);
+  font-weight: var(--font-body-weight-bold);
+  line-height: 1;
+}
+
+.badge--sale {
+  background-color: var(--color-sale);
+  color: var(--color-bg);
+}
+
+.badge--muted {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: var(--border-width) solid var(--color-border);
+}
+
+/* 12. Utilities ----------------------------------------------------------- */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.surface {
+  border-radius: var(--radius-m);
+  background-color: var(--color-surface);
+}
+
+.divider {
+  border: 0;
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+/* Decorative accent glow for dark sections (no image request) */
+.glow {
+  background-image: radial-gradient(
+    60% 50% at 50% 0%,
+    color-mix(in srgb, var(--color-accent) 12%, transparent),
+    transparent 70%
+  );
+}
+
+/* 13. Pagination ---------------------------------------------------------- */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-block-start: var(--space-7);
+}
+
+.pagination :is(a, .current, .deco) {
+  display: inline-grid;
+  place-items: center;
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-button);
+  text-decoration: none;
+}
+
+.pagination .current {
+  background-color: var(--color-button);
+  color: var(--color-button-label);
+  font-weight: var(--font-body-weight-bold);
+}
+
+/* 14. Motion -------------------------------------------------------------- */
+/* Scroll reveal: pure CSS, only where supported and only without reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .animations-enabled .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Reduced motion: no transitions, no animations, no smooth scrolling */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

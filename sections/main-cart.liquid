@@ -1,0 +1,158 @@
+{% comment %}
+  Interim cart page (step 4). Cart drawer and free-shipping progress
+  follow in step 9.
+{% endcomment %}
+
+<div class="section page-width stack" style="--stack-space: var(--space-7);">
+  <h1>{{ 'cart.title' | t }}</h1>
+
+  {%- if cart.item_count == 0 -%}
+    <div class="stack">
+      <p>{{ 'cart.empty' | t }}</p>
+      <a class="button" href="{{ routes.all_products_collection_url }}">{{ 'cart.continue_shopping' | t }}</a>
+    </div>
+  {%- else -%}
+    <form class="cart" action="{{ routes.cart_url }}" method="post">
+      <ul class="cart__items" role="list">
+        {%- for item in cart.items -%}
+          <li class="cart-item">
+            {% render 'image',
+              image: item.image,
+              url: item.url,
+              alt: '',
+              ratio: '1 / 1',
+              fit: 'contain',
+              sizes: '96px',
+              max_width: 300,
+              widths: '96, 192, 288',
+              class: 'cart-item__image'
+            %}
+
+            <div class="cart-item__details">
+              <a class="cart-item__title link--plain" href="{{ item.url }}">{{ item.product.title }}</a>
+              {%- unless item.product.has_only_default_variant -%}
+                <p class="text-small text-muted">{{ item.variant.title }}</p>
+              {%- endunless -%}
+              <p>{{ item.final_line_price | money }}</p>
+            </div>
+
+            <div class="cart-item__actions">
+              <div class="field">
+                <label for="Quantity-{{ item.key }}">{{ 'cart.quantity' | t }}</label>
+                <input
+                  id="Quantity-{{ item.key }}"
+                  type="number"
+                  name="updates[]"
+                  value="{{ item.quantity }}"
+                  min="0"
+                  inputmode="numeric"
+                >
+              </div>
+              <a class="cart-item__remove" href="{{ item.url_to_remove }}">
+                {{- 'cart.remove' | t -}}
+                <span class="visually-hidden">: {{ item.product.title }}</span>
+              </a>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      <div class="cart__summary stack">
+        <p class="cart__subtotal">
+          <span>{{ 'cart.subtotal' | t }}</span>
+          <strong>{{ cart.total_price | money }}</strong>
+        </p>
+        <p class="text-small text-muted">{{ 'cart.taxes_shipping_note' | t }}</p>
+        <button type="submit" name="checkout" class="button button--large button--full">
+          {% render 'icon', name: 'lock' %}
+          <span>{{ 'cart.checkout' | t }}</span>
+        </button>
+        <button type="submit" name="update" class="button button--secondary button--full">{{ 'cart.update' | t }}</button>
+      </div>
+    </form>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .cart {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .cart__items {
+    display: grid;
+    border-top: var(--border-width) solid var(--color-border);
+  }
+
+  .cart-item {
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .cart-item__details {
+    display: grid;
+    align-content: start;
+    gap: var(--space-1);
+  }
+
+  .cart-item__title {
+    font-weight: var(--font-body-weight-bold);
+  }
+
+  .cart-item__actions {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--space-4);
+  }
+
+  .cart-item__actions input {
+    width: 6rem;
+  }
+
+  .cart-item__remove {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    font-size: var(--fs-small);
+  }
+
+  .cart__subtotal {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    font-size: var(--fs-h3);
+  }
+
+  @media (min-width: 990px) {
+    .cart {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      align-items: start;
+    }
+
+    .cart-item {
+      grid-template-columns: 6rem minmax(0, 1fr) auto;
+    }
+
+    .cart-item__actions {
+      grid-column: auto;
+    }
+
+    .cart__summary {
+      padding: var(--space-6);
+      border-radius: var(--radius-m);
+      background-color: var(--color-surface);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.main_cart.name",
+  "settings": []
+}
+{% endschema %}

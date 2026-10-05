@@ -4,7 +4,7 @@
 > Prüfinstanz ist der Sub-Agent [`design-language-guardian`](../../.claude/agents/design-language-guardian.md).
 > Inspirationsquelle (nur Prinzipien): [hydrozz-analysis.md](hydrozz-analysis.md).
 >
-> **Stand:** 2026-10-05 · **Gilt für:** alle Sections, Blocks, Snippets, `critical.css`, `css-variables.liquid`, Templates.
+> **Stand:** 2026-10-05 (nach Schritt 7) · **Gilt für:** alle Sections, Blocks, Snippets, `critical.css`, `css-variables.liquid`, Templates.
 > Bestehende Tokens bleiben die Quelle der Wahrheit. Dieses Dokument beschreibt, **wie** sie eingesetzt werden, und markiert Ergänzungen ausdrücklich als *Vorschlag*.
 
 ---
@@ -284,7 +284,7 @@ Schriften kommen ausschließlich über `font_picker` und `font_face` aus dem Sho
 |---|---|---|---|---|
 | 1 | `hero` | **3 Nacht** | Emotion + 1 CTA | ✅ |
 | 2 | `trust-bar` | 2 Fläche | Risikoabbau direkt unter dem Hero | ✅ |
-| 3 | `featured-collection` (Bestseller) | 1 Hell | kaufbar, früh | ✅ Produktbilder auf dunkler Bühne |
+| 3 | `featured-collection` (Bestseller) | 1 Hell | kaufbar, früh | ⚠️ Karten noch **ohne** `stage: true` (offen, siehe §13) |
 | 4 | `benefits` | 1 Hell | Rationalisierung | ✅ |
 | 5 | `how-it-works` | **3 Nacht** | Einbau in 3 Schritten | ✅ |
 | 6 | `image-with-text` (Story) | **3 Nacht** | Stimmung / Marke | ⚠️ zwei Nachtbühnen in Folge, mit Lichtlinie trennen oder Story auf hell stellen |
@@ -304,13 +304,14 @@ Schriften kommen ausschließlich über `font_picker` und `font_face` aus dem Sho
 - Abfolge **Emotion → Beweis → Produkt → Erklärung → Einwand → Abschluss.** Kaufbare Produkte erscheinen spätestens im 3. Bildschirm.
 - Jede Section hat **ein** Thema, **eine** Headline und höchstens **einen** CTA.
 - Abstände kommen nur über `.section` (`--section-y`). Keine Section setzt eigenes vertikales Padding, außer Hero und Trust-Bar (kompakt).
+- **Ausnahme Template-Seiten** (Kollektion, Produkt, Seite, Artikel), die mit einer Breadcrumb beginnen: oben nur `--space-5` (mobil) bzw. `--space-6` (ab 990 px), damit Breadcrumb und H1 nah am Header stehen. Unten gilt weiter `--section-y`.
 - Header (`scheme-1`) und Announcement-Bar (`scheme-3`) bleiben, der Footer ist `scheme-3`. Damit endet jede Seite auf einer Nachtbühne.
 
 ### 8.3 Weitere Seiten
 
 | Seite | Rhythmus |
 |---|---|
-| **Kollektion** | Hell: Breadcrumb → H1 + Intro (kurz) → Filter/Sortierung → Grid → Pagination → optional SEO-Text (`.rte`, muted) → FAQ (Fläche). Kein großes Bild-Banner nötig. Optional eine schmale Nachtbühne mit Kollektionsbild. |
+| **Kollektion** *(umgesetzt, Schritt 7)* | Hell: Breadcrumb → H1 + Beschreibung → Toolbar (Filter-Button mobil, Anzahl, Sortierung) → aktive Filter-Chips → Sidebar-Filter (ab 990 px) bzw. Drawer (mobil) + Grid 2/3/4 auf `.media--stage` → Pagination → SEO-Text (Metafeld `custom.seo_text` oder Section-Setting, nur Seite 1 ohne Filter). Steuerhinweis pro Karte, Versandkosten-Link im Footer. Ohne JS: Filter inline über dem Grid. |
 | **Produkt** | Hell: Galerie (dunkle Bühne) + Buybox → Nutzen-Liste → Lieferumfang/Technik (Tabelle) → Kompatibilität (`custom.kompatibilitaet`) → **Nachtbühne** „So wirkt es“ → Einbau-Schritte → FAQ → verwandte Produkte. |
 | **Warenkorb** | Hell, ruhig: Positionen → Fortschritt Gratisversand → Summe → Primär-CTA „Zur Kasse“ → Express-Buttons → Hinweis Widerruf/Versand. **Keine** Nachtbühne, kein Cross-Sell-Lärm. |
 | **Ratgeber / Artikel** | Hell, `.page-width--narrow`, `.rte`, Kapitelmarken, Bilder 3 : 2. |
@@ -433,6 +434,7 @@ Schriften kommen ausschließlich über `font_picker` und `font_face` aus dem Sho
 | `--color-stage-edge` | `#2A3441` | Rahmen der Bühne in dunklen Sections |
 | `--color-stage-text` | `#F2F4F7` | Inhalt auf der Bühne (Platzhalter-Illustration) |
 | `--color-stage-glow` | `#3DD5EE` | Lichtschimmer der Bühne, unabhängig vom hellen Akzent |
+| `--color-backdrop` | `rgb(11 15 20 / .55)` | Dimmung hinter modalen Drawern (`::backdrop`); auf `:root, ::backdrop` gesetzt, weil `::backdrop` nicht überall erbt (Schritt 7) |
 
 **Klassen** in `assets/critical.css`:
 
@@ -589,3 +591,16 @@ Die Schwelle kommt aus `settings.free_shipping_threshold` (nur DE, siehe Setting
 - [ ] Texte über Locales, Platzhalter als „PLATZHALTER“ gekennzeichnet
 - [ ] Keine Claims, Bewertungen oder Rabatte ohne echte Daten
 - [ ] `shopify theme check` ohne neue Fehler
+
+---
+
+## 13. Offene Punkte (Stand nach Schritt 7)
+
+| Punkt | Bezug | Entscheidung |
+|---|---|---|
+| Startseiten-Bestseller auf dunkle Bühne (`stage: true` in `sections/featured-collection.liquid` oder Default `true` in `product-card`) | §0 Regel 6, §6.1, §8.1 | Nutzer |
+| Header-Backdrop (`sections/header.liquid`) von `rgb(11 15 20 / …)` auf `var(--color-backdrop)` umstellen | §2.3, §12.3 | Folgeaufgabe |
+| Paginierung mobil: Umbruch hinnehmen (aktuell) oder kompakt „‹ aktuelle Seite ±1 ›“ | §9 | Nutzer |
+| Steuerhinweis pro Karte + Versandkosten-Link nur im Footer rechtlich bestätigen | §6.1 | Nutzer |
+| Kapitelmarke `.chapter` und Button-Halo (§12.4) noch nicht umgesetzt | §3.3, §5 | bei Bedarf |
+| `snippets/light-line.liquid` noch ungenutzt (Theme-Check-Warnung OrphanedSnippet) | §2.4 | mit erster Nachtbühne nutzen |

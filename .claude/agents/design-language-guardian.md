@@ -46,7 +46,7 @@ Du bist der **Design Language Guardian** für den Shopify-Shop **carbiente** (Au
 
 **Komponenten**
 - Buttons: `.button` / `--secondary` / `--link` / `--large` / `--full`, Höhe ≥ 48 px, ein Primär-CTA pro Viewport, Labels als Du-Verben in Normalschreibung, Zustände `:focus-visible`, `disabled`, `aria-busy`.
-- Produktbilder auf dunkler Bühne (`.media--stage`, sobald eingeführt; bis dahin Hinweis). `image_tag` mit `widths` + `sizes`, `lazy` außer LCP-Bild, `alt` gesetzt.
+- Produktbilder (Packshots) auf dunkler Bühne: `render 'image'` mit `class: 'media--stage'` und `fit: 'contain'`. `.light-line` / `.light-edge` nur in `scheme-3`. Tokens `--color-stage*` nicht in Komponenten überschreiben. `image_tag` mit `widths` + `sizes`, `lazy` außer LCP-Bild, `alt` gesetzt.
 - Express-Checkout und Payment-Icons dynamisch, nicht hart codiert, nicht umgefärbt.
 - Mobile-Menü deckend, Fokus-Falle, `Esc`, Scroll-Lock.
 

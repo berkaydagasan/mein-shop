@@ -90,7 +90,7 @@ Jedes Schema setzt dieselben Variablen (`snippets/css-variables.liquid`). Kompon
 | Effekt | Umsetzung | Regel |
 |---|---|---|
 | **Section-Glow** | bestehende Utility `.glow` (radial, 12 % Akzent, oben mittig) | max. 1 pro Nachtbühne, statisch |
-| **Lichtlinie** *(Vorschlag)* | 1 px Linie `linear-gradient(90deg, transparent, var(--color-accent), transparent)` | Signatur-Element: Section-Trenner auf dunkel, Oberkante der Karte bei Hover, aktive Nav. Erinnert an LED-Leisten. |
+| **Lichtlinie** *(umgesetzt: `.light-line`, `.light-edge`, Snippet `light-line`)* | 1 px Linie `linear-gradient(90deg, transparent, var(--color-accent), transparent)` | Signatur-Element: Section-Trenner auf dunkel, Oberkante der Karte bei Hover, aktive Nav. Erinnert an LED-Leisten. |
 | **Button-Halo** *(Vorschlag)* | `box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-accent) 22%, transparent)` bei Hover/Fokus | nur Cyan-Button auf dunkel, kein weicher 40-px-Schlagschatten |
 | **Bild-Glow** | entsteht **im Foto** (echtes Ambientelicht) | Keine CSS-Glows über Produktbildern |
 
@@ -224,7 +224,7 @@ Schriften kommen ausschließlich über `font_picker` und `font_face` aus dem Sho
 ┌──────────────────────┐
 │ [Badge]              │  ← .product-card__badges (max. 2: Sale, Ausverkauft, Neu*)
 │                      │
-│   PRODUKT auf        │  ← .media.media--stage (dunkle Bühne, Vorschlag)
+│   PRODUKT auf        │  ← .media.media--stage (dunkle Bühne)
 │   DUNKLER BÜHNE      │     Seitenverhältnis 1:1 (Setting image_ratio)
 │                      │
 └──────────────────────┘
@@ -234,9 +234,9 @@ Schriften kommen ausschließlich über `font_picker` und `font_face` aus dem Sho
   [ In den Warenkorb ]   ← .product-card__actions (secondary, full, optional)
 ```
 
-- **Bildbühne immer dunkel**, auch in hellen Sections. Das ist die zentrale Anpassung an hydrozz. *Vorschlag:* Modifier `.media--stage` mit `background: #0B0F14` (Token `--color-stage`) plus einem dezenten radialen Cyan-Schimmer von unten. Das Produktbild sitzt mit `--fit: contain` und Padding (bestehend 6 %) darin. Lifestyle-Bilder nutzen `cover` ohne Padding.
+- **Bildbühne immer dunkel**, auch in hellen Sections. Das ist die zentrale Anpassung an hydrozz. Umgesetzt als Modifier `.media--stage` (Token `--color-stage`, siehe §12.3) plus einem dezenten radialen Cyan-Schimmer von unten. Das Produktbild sitzt mit `--fit: contain` und Padding (bestehend 6 %) darin. Lifestyle-Bilder nutzen `cover` ohne Padding.
 - Ganze Karte klickbar (bestehend: `.product-card__link::after`). Der Quick-Add-Button liegt mit `z-index: 2` darüber.
-- **Hover (nur `@media (hover: hover)`):** Das Bild skaliert auf 1.03 (600 ms, `--ease-out`). Das Zweitbild wird eingeblendet, falls vorhanden (bestehend). Auf dunkel erscheint *(Vorschlag)* zusätzlich die Lichtlinie an der Oberkante. Kein Anheben, kein Schatten.
+- **Hover (nur `@media (hover: hover)`):** Das Bild skaliert auf 1.03 (600 ms, `--ease-out`). Das Zweitbild wird eingeblendet, falls vorhanden (bestehend). Auf dunkel erscheint zusätzlich die Lichtlinie an der Oberkante (`.light-edge`). Kein Anheben, kein Schatten.
 - **Inhalt mobil reduzieren:** Kurzbeschreibung entfällt. Der Button bleibt nur, wenn `show_quick_add` aktiv ist, und wird mobil vollbreit unter den Preis gesetzt.
 - Badges: `.badge--sale` nur bei echtem `compare_at_price`, `.badge--muted` für „Ausverkauft“, „Neu“ nur mit Datumslogik bzw. Tag (nicht erfinden).
 - Karten **ohne** Rahmen und Schatten auf hell. Auf dunkel bekommt die Bildfläche einen 1-px-Rahmen in `--color-border`, damit die Bühne sich vom Hintergrund löst.
@@ -423,38 +423,45 @@ Schriften kommen ausschließlich über `font_picker` und `font_face` aus dem Sho
 
 *(Parameter laut `{% doc %}` von `snippets/section-heading.liquid`: `eyebrow`, `heading`, `text`, `link_label`, `link_url`, `align`, `id`. Locale-Keys `t:settings.color_scheme` und `t:settings.glow` existieren bereits in `de.schema.json`.)*
 
-### 12.3 Token-Ergänzungen *(Vorschlag, eigener Schritt mit Freigabe)*
+### 12.3 Bühne & Licht – umgesetzt (Vorbereitung Schritt 7)
+
+**Tokens** in `snippets/css-variables.liquid` (`:root`, schema-unabhängig, entsprechen den Nacht-Defaults):
+
+| Token | Wert | Zweck |
+|---|---|---|
+| `--color-stage` | `#0B0F14` | Hintergrund der Produktbildbühne |
+| `--color-stage-edge` | `#2A3441` | Rahmen der Bühne in dunklen Sections |
+| `--color-stage-text` | `#F2F4F7` | Inhalt auf der Bühne (Platzhalter-Illustration) |
+| `--color-stage-glow` | `#3DD5EE` | Lichtschimmer der Bühne, unabhängig vom hellen Akzent |
+
+**Klassen** in `assets/critical.css`:
+
+| Klasse | Abschnitt | Wirkung |
+|---|---|---|
+| `.media--stage` | 9. Media | dunkle Bühne + radialer Cyan-Schimmer von unten; in `.color-scheme-3` zusätzlich 1-px-Rahmen; Platzhalter-SVG hell auf dunkel |
+| `.light-line` | 12. Utilities | 1-px-Linie, Verlauf transparent → `--color-accent` → transparent, 70 % Deckkraft |
+| `.light-edge` | 12. Utilities | Lichtlinie an der Oberkante, erscheint bei `:hover` (nur Hover-Geräte) und `:focus-within` |
+
+**Snippet** `snippets/light-line.liquid`: dekorativ (`<span aria-hidden="true">`) oder mit `separator: true` als semantisches `<hr>`.
+
+**Verwendung**
 
 ```liquid
-{%- comment -%} snippets/css-variables.liquid → :root {%- endcomment -%}
---color-stage: #0B0F14;              /* Produktbildbühne, schema-unabhängig */
---color-stage-edge: #2A3441;         /* Rahmen der Bühne auf dunklen Sections */
---color-glow: #3DD5EE;               /* Lichtfarbe, unabhängig vom hellen Akzent */
---light-line: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+{%- comment -%} Produktbild auf Bühne (Packshot) {%- endcomment -%}
+{% render 'image', image: product.featured_image, class: 'media--stage', fit: 'contain', ratio: '1 / 1', sizes: '(min-width: 990px) 25vw, 50vw' %}
+
+{%- comment -%} Lichtlinie in einer Nachtbühne {%- endcomment -%}
+{% render 'light-line' %}
+
+{%- comment -%} Karte mit Lichtkante (nur in scheme-3 einsetzen) {%- endcomment -%}
+<div class="product-card light-edge">…</div>
 ```
 
-### 12.4 Utilities für `critical.css` *(Vorschlag)*
+Regeln: `.light-line` und `.light-edge` nur in `scheme-3`; `.media--stage` in allen Schemata für Produktbilder (nicht für Lifestyle-Bilder). Die Bühne setzt kein `--fit` – `fit: 'contain'` wird beim Rendern übergeben.
+
+### 12.4 Weitere Utilities *(Vorschlag, noch nicht umgesetzt)*
 
 ```css
-/* Product image stage: dark backdrop so the lit product reads, in every scheme */
-.media--stage {
-  background-color: var(--color-stage);
-  background-image: radial-gradient(70% 45% at 50% 100%, color-mix(in srgb, var(--color-glow) 14%, transparent), transparent 70%);
-  --fit: contain;
-}
-
-.color-scheme-3 .media--stage {
-  box-shadow: inset 0 0 0 var(--border-width) var(--color-stage-edge);
-}
-
-/* Light line: LED-strip style divider, dark sections only */
-.light-line {
-  height: 1px;
-  border: 0;
-  background: var(--light-line);
-  opacity: 0.7;
-}
-
 /* Chapter marker for steps and guides */
 .chapter__index {
   color: var(--color-accent);
@@ -576,7 +583,7 @@ Die Schwelle kommt aus `settings.free_shipping_threshold` (nur DE, siehe Setting
 - [ ] `color_scheme`-Setting vorhanden, Section in allen 3 Schemata lesbar
 - [ ] Eine H1 pro Seite, Überschriften-Hierarchie lückenlos
 - [ ] Buttons: Pill, ≥ 48 px, ein Primär-CTA pro Viewport, Fokus sichtbar
-- [ ] Produktbilder auf `.media--stage` (sobald eingeführt), `image_tag` mit `widths` und `sizes`
+- [ ] Produktbilder auf `.media--stage`, `image_tag` mit `widths` und `sizes`
 - [ ] Mobile 390 px: kein horizontaler Scroll, Targets ≥ 48 px, Text ≥ 16 px
 - [ ] Motion nur über Tokens, Reduced Motion geprüft
 - [ ] Texte über Locales, Platzhalter als „PLATZHALTER“ gekennzeichnet

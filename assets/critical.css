@@ -577,6 +577,27 @@ input[type='radio'] {
   inset-inline-start: var(--space-3);
 }
 
+/* Product stage: lit products read best on a dark backdrop, in light sections too.
+   Usage: {% render 'image', image: …, class: 'media--stage', fit: 'contain' %} */
+.media--stage {
+  background-color: var(--color-stage);
+  background-image: radial-gradient(
+    70% 45% at 50% 100%,
+    color-mix(in srgb, var(--color-stage-glow) 14%, transparent),
+    transparent 70%
+  );
+}
+
+/* Separates the stage from an equally dark section background */
+.color-scheme-3 .media--stage {
+  box-shadow: inset 0 0 0 var(--border-width) var(--color-stage-edge);
+}
+
+.media--stage > .placeholder-svg {
+  background-color: transparent;
+  fill: color-mix(in srgb, var(--color-stage-text) 18%, transparent);
+}
+
 .icon {
   width: var(--icon-size, 1.5rem);
   height: var(--icon-size, 1.5rem);
@@ -680,6 +701,45 @@ input[type='radio'] {
     color-mix(in srgb, var(--color-accent) 12%, transparent),
     transparent 70%
   );
+}
+
+/* Light line: LED-strip style accent, for dark (night) sections only.
+   Usage: {% render 'light-line' %} */
+.light-line {
+  display: block;
+  width: 100%;
+  height: 1px;
+  border: 0;
+  background-image: linear-gradient(90deg, transparent, var(--color-accent) 50%, transparent);
+  opacity: 0.7;
+}
+
+/* Light edge: the light line appears on the top edge on hover/focus, e.g. cards on dark */
+.light-edge {
+  position: relative;
+}
+
+.light-edge::before {
+  content: '';
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 10%;
+  z-index: 1;
+  height: 1px;
+  background-image: linear-gradient(90deg, transparent, var(--color-accent) 50%, transparent);
+  opacity: 0;
+  transition: opacity var(--duration-base) var(--ease-out);
+  pointer-events: none;
+}
+
+.light-edge:focus-within::before {
+  opacity: 0.8;
+}
+
+@media (hover: hover) {
+  .light-edge:hover::before {
+    opacity: 0.8;
+  }
 }
 
 /* 13. Pagination ---------------------------------------------------------- */

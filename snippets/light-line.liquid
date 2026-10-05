@@ -1,0 +1,22 @@
+{% doc %}
+  Renders the light line: a 1px LED-strip style accent line in the color
+  scheme's accent color. Use it in dark (night) sections only, e.g. between
+  a section heading and its content or between two night sections.
+
+  Decorative by default (hidden from assistive technology). Pass
+  `separator: true` when it marks a real thematic break; it then renders
+  as <hr>.
+
+  @param {boolean} [separator] - Render as semantic <hr> instead of a decorative element. Default: false
+  @param {string} [class] - Additional classes, e.g. for spacing
+
+  @example
+  {% render 'light-line' %}
+  {% render 'light-line', separator: true, class: 'section-divider' %}
+{% enddoc %}
+
+{%- if separator -%}
+  <hr class="light-line{% if class != blank %} {{ class }}{% endif %}">
+{%- else -%}
+  <span class="light-line{% if class != blank %} {{ class }}{% endif %}" aria-hidden="true"></span>
+{%- endif -%}

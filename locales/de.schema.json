@@ -1,5 +1,13 @@
 {
   "settings": {
+    "logo": {
+      "name": "Logo & Favicon",
+      "logo": "Logo",
+      "logo_info": "SVG oder PNG mit transparentem Hintergrund. Ohne Logo wird der Shopname als Text-Logo angezeigt.",
+      "logo_width": "Logobreite",
+      "favicon": "Favicon",
+      "favicon_info": "Quadratisch, mindestens 180 × 180 px."
+    },
     "color_scheme": "Farbschema",
     "colors": {
       "name": "Farben",
@@ -66,13 +74,31 @@
   "sections": {
     "header": {
       "name": "Header",
-      "menu": "Menü",
-      "customer_account_menu": "Kundenkonto-Menü"
+      "sticky": "Header beim Scrollen fixieren",
+      "menu": "Hauptmenü",
+      "menu_info": "Links zu Kollektionen ohne Produkte werden im Shop automatisch ausgeblendet.",
+      "drawer": "Mobiles Menü",
+      "show_all_products": "Link „Alle Produkte“ anzeigen",
+      "drawer_menu": "Zusatzmenü (Service)",
+      "drawer_menu_info": "Empfohlen: Menü „footer-service“."
     },
     "footer": {
       "name": "Footer",
-      "menu": "Menü",
-      "show_payment_icons": "Zahlungsarten anzeigen"
+      "legal_menu": "Menü Rechtliches",
+      "legal_menu_info": "Leer lassen, um die Richtlinien aus Einstellungen → Richtlinien automatisch zu verlinken.",
+      "show_payment_icons": "Zahlungsarten anzeigen",
+      "blocks": {
+        "brand": {
+          "name": "Marke",
+          "text": "Text"
+        },
+        "menu": {
+          "name": "Menü-Spalte",
+          "menu": "Menü",
+          "heading": "Überschrift",
+          "heading_info": "Leer lassen, um den Menünamen zu verwenden."
+        }
+      }
     },
     "main_product": {
       "name": "Produktseite"
@@ -106,6 +132,12 @@
     },
     "styleguide": {
       "name": "Styleguide (Entwicklung)"
+    },
+    "announcement_bar": {
+      "name": "Ankündigungsleiste",
+      "text": "Text",
+      "text_info": "Leer lassen für den automatischen Text „Gratisversand ab … innerhalb Deutschlands“ aus Theme-Einstellungen → Versand.",
+      "link": "Link (optional)"
     }
   }
 }

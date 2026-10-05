@@ -4,6 +4,11 @@
     {% # Charset, viewport, title, description, canonical, social tags – must come first %}
     {% render 'meta-tags' %}
 
+    {%- if settings.favicon != blank %}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+      <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
+    {%- endif %}
+
     {% comment %}
       Font loading: fonts are served from the shop's own domain (/cdn/fonts),
       so no preconnect is needed. Preload only the two faces needed for the

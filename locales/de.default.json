@@ -12,14 +12,30 @@
     "cart_label": {
       "one": "Warenkorb, {{ count }} Artikel",
       "other": "Warenkorb, {{ count }} Artikel"
-    }
+    },
+    "home": "Startseite",
+    "menu": "Menü",
+    "open_menu": "Menü öffnen",
+    "close_menu": "Menü schließen",
+    "account": "Mein Konto",
+    "login": "Anmelden",
+    "all_products": "Alle Produkte",
+    "drawer_menu_hint": "Hinweis (nur im Editor sichtbar): Lege unter Inhalte → Menüs das Menü „footer-service“ an und wähle es im Header unter „Zusatzmenü (Service)“ aus."
   },
   "footer": {
-    "navigation": "Footer-Navigation",
     "payment_methods": "Zahlungsarten",
     "price_note": "Alle Preise inkl. MwSt., zzgl. Versandkosten.",
     "price_note_html": "Alle Preise inkl. MwSt., zzgl. {{ link }}.",
-    "shipping_costs": "Versandkosten"
+    "shipping_costs": "Versandkosten",
+    "legal": "Rechtliches",
+    "cookie_settings": "Cookie-Einstellungen",
+    "legal_placeholder": "[PLATZHALTER] Noch nicht unter Einstellungen → Richtlinien hinterlegt:",
+    "menu_hint": "Hinweis (nur im Editor sichtbar): Für diese Spalte ist kein Menü ausgewählt oder es existiert noch nicht. Lege es unter Inhalte → Menüs an.",
+    "policy_imprint": "Impressum",
+    "policy_privacy": "Datenschutzerklärung",
+    "policy_terms": "AGB",
+    "policy_refund": "Widerrufsbelehrung",
+    "policy_shipping": "Versandbedingungen"
   },
   "products": {
     "add_to_cart": "In den Warenkorb",
@@ -86,5 +102,8 @@
     "expired": "Diese Geschenkkarte ist abgelaufen.",
     "expires_on": "Gültig bis {{ expires_on }}",
     "use_at_checkout": "Löse diese Geschenkkarte im Checkout ein."
+  },
+  "announcement": {
+    "free_shipping": "Gratisversand ab {{ amount }} innerhalb Deutschlands"
   }
 }

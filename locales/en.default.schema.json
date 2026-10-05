@@ -1,5 +1,13 @@
 {
   "settings": {
+    "logo": {
+      "name": "Logo & favicon",
+      "logo": "Logo",
+      "logo_info": "SVG or PNG with transparent background. Without a logo the shop name is shown as a text logo.",
+      "logo_width": "Logo width",
+      "favicon": "Favicon",
+      "favicon_info": "Square, at least 180 × 180 px."
+    },
     "color_scheme": "Color scheme",
     "colors": {
       "name": "Colors",
@@ -66,13 +74,31 @@
   "sections": {
     "header": {
       "name": "Header",
-      "menu": "Menu",
-      "customer_account_menu": "Customer account menu"
+      "sticky": "Sticky header",
+      "menu": "Main menu",
+      "menu_info": "Links to collections without products are hidden automatically.",
+      "drawer": "Mobile menu",
+      "show_all_products": "Show \"All products\" link",
+      "drawer_menu": "Secondary menu (service)",
+      "drawer_menu_info": "Recommended: menu \"footer-service\"."
     },
     "footer": {
       "name": "Footer",
-      "menu": "Menu",
-      "show_payment_icons": "Show payment icons"
+      "legal_menu": "Legal menu",
+      "legal_menu_info": "Leave empty to link the store policies from Settings → Policies automatically.",
+      "show_payment_icons": "Show payment icons",
+      "blocks": {
+        "brand": {
+          "name": "Brand",
+          "text": "Text"
+        },
+        "menu": {
+          "name": "Menu column",
+          "menu": "Menu",
+          "heading": "Heading",
+          "heading_info": "Leave empty to use the menu name."
+        }
+      }
     },
     "main_product": {
       "name": "Product page"
@@ -106,6 +132,12 @@
     },
     "styleguide": {
       "name": "Styleguide (dev only)"
+    },
+    "announcement_bar": {
+      "name": "Announcement bar",
+      "text": "Text",
+      "text_info": "Leave empty for the automatic free shipping text from Theme settings → Shipping.",
+      "link": "Link (optional)"
     }
   }
 }

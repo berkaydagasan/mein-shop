@@ -1,0 +1,47 @@
+{% doc %}
+  Renders the shop logo from Theme settings → Logo & Favicon, or the shop
+  name as a text wordmark when no logo is uploaded. Width is controlled by
+  the "Logo width" setting (--logo-width) and capped on small screens.
+
+  @param {string} [class] - Additional classes for the wrapper
+
+  @example
+  {% render 'logo', class: 'site-header__logo' %}
+{% enddoc %}
+
+<span class="logo{% if class != blank %} {{ class }}{% endif %}" style="--logo-width: {{ settings.logo_width }}px;">
+  {%- if settings.logo != blank -%}
+    {%- capture logo_sizes -%}{{ settings.logo_width }}px{%- endcapture -%}
+    {{
+      settings.logo
+      | image_url: width: 480
+      | image_tag: widths: '120, 180, 240, 360, 480', sizes: logo_sizes, alt: shop.name, loading: 'eager', class: 'logo__image'
+    }}
+  {%- else -%}
+    <span class="logo__text">{{ shop.name }}</span>
+  {%- endif -%}
+</span>
+
+{% stylesheet %}
+  .logo {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .logo__image {
+    width: min(var(--logo-width), 40vw);
+    height: auto;
+    max-height: calc(var(--header-height) - 1rem);
+    object-fit: contain;
+    object-position: left center;
+  }
+
+  .logo__text {
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+    font-size: 1.375rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+{% endstylesheet %}

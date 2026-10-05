@@ -1,42 +1,107 @@
 {% comment %}
-  Interim header (step 4): wordmark, main menu, search, account and cart.
-  Sticky behaviour, mobile drawer and logo upload follow in step 5.
+  Site header: sticky bar with fixed height, logo, desktop navigation
+  (from 1200px) and a mobile menu drawer built on <dialog>.
+
+  The drawer opens without JavaScript in browsers that support invoker
+  commands (command/commandfor); the deferred script below adds a fallback
+  for older browsers, light dismiss and auto-close on desktop.
+
+  Links to empty collections (or the empty catalog) are hidden until
+  products exist, so the navigation never leads to empty pages.
 {% endcomment %}
 
-<header class="site-header color-{{ section.settings.color_scheme }}">
+{%- assign drawer_id = 'MenuDrawer-' | append: section.id -%}
+
+<header class="site-header color-{{ section.settings.color_scheme }}{% if section.settings.sticky %} site-header--sticky{% endif %}">
   <div class="site-header__inner page-width">
-    <a class="site-header__logo" href="{{ routes.root_url }}">{{ shop.name }}</a>
+    <div class="site-header__start">
+      <button
+        type="button"
+        class="icon-button site-header__menu-button"
+        command="show-modal"
+        commandfor="{{ drawer_id }}"
+        aria-controls="{{ drawer_id }}"
+        aria-haspopup="dialog"
+      >
+        {% render 'icon', name: 'menu' %}
+        <span class="visually-hidden">{{ 'header.open_menu' | t }}</span>
+      </button>
+    </div>
+
+    <a class="site-header__logo" href="{{ routes.root_url }}">
+      {%- render 'logo' -%}
+      {%- if settings.logo != blank -%}
+        <span class="visually-hidden">{{ 'header.home' | t }}</span>
+      {%- endif -%}
+    </a>
 
     {%- if section.settings.menu.links.size > 0 -%}
       <nav class="site-header__nav" aria-label="{{ 'header.main_navigation' | t }}">
         <ul class="site-header__menu" role="list">
           {%- for link in section.settings.menu.links -%}
-            <li>
-              <a
-                class="site-header__link"
-                href="{{ link.url }}"
-                {% if link.current %}
-                  aria-current="page"
-                {% endif %}
-              >
-                {{- link.title -}}
-              </a>
-            </li>
+            {%- liquid
+              assign link_hidden = false
+              if link.type == 'collection_link' and link.object.all_products_count == 0
+                assign link_hidden = true
+              elsif link.type == 'catalog_link' and shop.products_count == 0
+                assign link_hidden = true
+              endif
+            -%}
+            {%- unless link_hidden -%}
+              <li>
+                {%- if link.links.size > 0 -%}
+                  <details class="nav-dropdown" name="header-nav">
+                    <summary class="site-header__link{% if link.child_active %} is-active{% endif %}">
+                      {{- link.title -}}
+                      {% render 'icon', name: 'chevron-down', class: 'nav-dropdown__chevron' %}
+                    </summary>
+                    <ul class="nav-dropdown__list color-{{ section.settings.color_scheme }}" role="list">
+                      {%- for child in link.links -%}
+                        <li>
+                          <a
+                            class="nav-dropdown__link"
+                            href="{{ child.url }}"
+                            {% if child.current %}
+                              aria-current="page"
+                            {% endif %}
+                          >
+                            {{- child.title -}}
+                          </a>
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </details>
+                {%- else -%}
+                  <a
+                    class="site-header__link{% if link.active %} is-active{% endif %}"
+                    href="{{ link.url }}"
+                    {% if link.current %}
+                      aria-current="page"
+                    {% endif %}
+                  >
+                    {{- link.title -}}
+                  </a>
+                {%- endif -%}
+              </li>
+            {%- endunless -%}
           {%- endfor -%}
         </ul>
       </nav>
     {%- endif -%}
 
-    <div class="site-header__icons">
+    <div class="site-header__end">
       <a class="icon-button" href="{{ routes.search_url }}">
         {% render 'icon', name: 'search' %}
         <span class="visually-hidden">{{ 'header.search' | t }}</span>
       </a>
 
       {%- if shop.customer_accounts_enabled -%}
-        <shopify-account menu="{{ section.settings.customer_account_menu }}" class="icon-button">
+        <a class="icon-button site-header__account" href="{{ routes.account_url }}">
           {% render 'icon', name: 'account' %}
-        </shopify-account>
+          <span class="visually-hidden">
+            {%- if customer %}{{ 'header.account' | t }}{% else %}{{ 'header.login' | t }}{% endif -%}
+          </span>
+        </a>
       {%- endif -%}
 
       <a class="icon-button site-header__cart" href="{{ routes.cart_url }}">
@@ -50,65 +115,160 @@
       </a>
     </div>
   </div>
+
+  {%- comment -%} Mobile / tablet menu drawer {%- endcomment -%}
+  <dialog
+    id="{{ drawer_id }}"
+    class="menu-drawer color-{{ section.settings.color_scheme }}"
+    aria-labelledby="{{ drawer_id }}-title"
+    closedby="any"
+    data-light-dismiss
+    data-scroll-lock
+  >
+    <div class="menu-drawer__header">
+      <h2 id="{{ drawer_id }}-title" class="h4">{{ 'header.menu' | t }}</h2>
+      <button type="button" class="icon-button" command="close" commandfor="{{ drawer_id }}" autofocus>
+        {% render 'icon', name: 'close' %}
+        <span class="visually-hidden">{{ 'header.close_menu' | t }}</span>
+      </button>
+    </div>
+
+    <nav class="menu-drawer__nav" aria-label="{{ 'header.main_navigation' | t }}">
+      <ul class="menu-drawer__menu" role="list">
+        {%- if section.settings.show_all_products and shop.products_count > 0 -%}
+          <li>
+            <a class="menu-drawer__link" href="{{ routes.all_products_collection_url }}">
+              {{- 'header.all_products' | t -}}
+              {% render 'icon', name: 'chevron-right' %}
+            </a>
+          </li>
+        {%- endif -%}
+
+        {%- for link in section.settings.menu.links -%}
+          {%- liquid
+            assign link_hidden = false
+            if link.type == 'collection_link' and link.object.all_products_count == 0
+              assign link_hidden = true
+            elsif link.type == 'catalog_link' and shop.products_count == 0
+              assign link_hidden = true
+            endif
+          -%}
+          {%- unless link_hidden -%}
+            <li>
+              {%- if link.links.size > 0 -%}
+                <details class="menu-drawer__details"{% if link.child_active %} open{% endif %}>
+                  <summary class="menu-drawer__link">
+                    {{- link.title -}}
+                    {% render 'icon', name: 'chevron-down', class: 'menu-drawer__chevron' %}
+                  </summary>
+                  <ul class="menu-drawer__submenu" role="list">
+                    {%- for child in link.links -%}
+                      <li>
+                        <a
+                          class="menu-drawer__sublink"
+                          href="{{ child.url }}"
+                          {% if child.current %}
+                            aria-current="page"
+                          {% endif %}
+                        >
+                          {{- child.title -}}
+                        </a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                </details>
+              {%- else -%}
+                <a
+                  class="menu-drawer__link"
+                  href="{{ link.url }}"
+                  {% if link.current %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  {{- link.title -}}
+                  {% render 'icon', name: 'chevron-right' %}
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endunless -%}
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    {%- if section.settings.drawer_menu.links.size > 0 -%}
+      <nav class="menu-drawer__secondary" aria-labelledby="{{ drawer_id }}-service">
+        <h3 id="{{ drawer_id }}-service" class="eyebrow text-muted">{{ section.settings.drawer_menu.title }}</h3>
+        <ul role="list">
+          {%- for link in section.settings.drawer_menu.links -%}
+            <li><a class="menu-drawer__sublink" href="{{ link.url }}">{{ link.title }}</a></li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- elsif request.design_mode -%}
+      <p class="menu-drawer__hint text-small text-muted">{{ 'header.drawer_menu_hint' | t }}</p>
+    {%- endif -%}
+
+    <div class="menu-drawer__footer">
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="menu-drawer__sublink" href="{{ routes.account_url }}">
+          {% render 'icon', name: 'account' %}
+          <span>{% if customer %}{{ 'header.account' | t }}{% else %}{{ 'header.login' | t }}{% endif %}</span>
+        </a>
+      {%- endif -%}
+      {%- if settings.shipping_countries_note != blank -%}
+        <p class="text-small text-muted">{{ settings.shipping_countries_note }}</p>
+      {%- endif -%}
+    </div>
+  </dialog>
 </header>
 
 {% stylesheet %}
+  /* Sticky on the section wrapper so the header can stick within <body> */
+  .section-header:has(.site-header--sticky) {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
   .site-header {
     border-bottom: var(--border-width) solid var(--color-border);
   }
 
   .site-header__inner {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-    gap: 0 var(--space-4);
-    min-height: var(--header-height);
+    gap: var(--space-2);
+    height: var(--header-height);
+  }
+
+  .site-header__start {
+    display: flex;
+    margin-inline-start: calc(var(--space-3) * -1);
   }
 
   .site-header__logo {
     display: inline-flex;
     align-items: center;
     min-height: var(--touch-target);
-    font-family: var(--font-heading-family);
-    font-weight: var(--font-heading-weight);
-    font-size: 1.375rem;
-    letter-spacing: -0.02em;
+    color: inherit;
     text-decoration: none;
   }
 
   .site-header__nav {
-    order: 3;
-    width: 100%;
+    display: none;
   }
 
-  .site-header__menu {
+  .site-header__end {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0 var(--space-5);
-  }
-
-  .site-header__link {
-    display: inline-flex;
-    align-items: center;
-    min-width: var(--touch-target);
-    min-height: var(--touch-target);
-    font-size: var(--fs-small);
-    font-weight: var(--font-body-weight-bold);
-    text-decoration: none;
-  }
-
-  .site-header__link[aria-current='page'] {
-    text-decoration: underline;
-    text-decoration-color: var(--color-accent);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.4em;
-  }
-
-  .site-header__icons {
-    display: flex;
+    justify-content: flex-end;
     align-items: center;
     margin-inline-end: calc(var(--space-3) * -1);
+  }
+
+  /* Account lives in the drawer on small screens */
+  .site-header__account {
+    display: none;
   }
 
   .site-header__cart-count {
@@ -128,21 +288,299 @@
     line-height: 1;
   }
 
-  @media (min-width: 990px) {
+  @media (min-width: 750px) {
+    .site-header__account {
+      display: inline-grid;
+    }
+  }
+
+  /* Desktop navigation from 1200px: five long German menu labels need the room */
+  @media (min-width: 1200px) {
     .site-header__inner {
-      flex-wrap: nowrap;
+      grid-template-columns: auto 1fr auto;
+      gap: var(--space-6);
+    }
+
+    .site-header__start {
+      display: none;
     }
 
     .site-header__nav {
-      order: 0;
-      width: auto;
+      display: block;
+      justify-self: center;
+    }
+
+    .site-header__menu {
+      display: flex;
+      gap: var(--space-1) var(--space-2);
     }
 
     .site-header__link {
-      font-size: var(--fs-body);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      min-width: var(--touch-target);
+      min-height: var(--touch-target);
+      padding-inline: var(--space-3);
+      font-weight: var(--font-body-weight-bold);
+      white-space: nowrap;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .site-header__link:is([aria-current='page'], .is-active) {
+      text-decoration: underline;
+      text-decoration-color: var(--color-accent);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.45em;
+    }
+
+    @media (hover: hover) {
+      .site-header__link:hover {
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+        text-underline-offset: 0.45em;
+      }
+    }
+  }
+
+  /* Desktop dropdown (<details name> = only one open at a time, no JS) */
+  .nav-dropdown {
+    position: relative;
+  }
+
+  .nav-dropdown > summary {
+    list-style: none;
+  }
+
+  .nav-dropdown > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav-dropdown__chevron {
+    --icon-size: 1rem;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .nav-dropdown[open] .nav-dropdown__chevron {
+    transform: rotate(180deg);
+  }
+
+  .nav-dropdown__list {
+    position: absolute;
+    top: calc(100% + var(--space-2));
+    left: 0;
+    z-index: 10;
+    min-width: 15rem;
+    padding: var(--space-2);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+    box-shadow: var(--shadow-overlay);
+  }
+
+  .nav-dropdown__link {
+    display: flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-s);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .nav-dropdown__link:hover {
+      background-color: var(--color-surface);
+    }
+  }
+
+  /* Menu drawer (<dialog>) */
+  .menu-drawer {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(26rem, calc(100vw - 3rem));
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transform: translateX(-100%);
+    transition:
+      transform var(--duration-base) var(--ease-out),
+      overlay var(--duration-base) allow-discrete,
+      display var(--duration-base) allow-discrete;
+  }
+
+  .menu-drawer[open] {
+    display: flex;
+    flex-direction: column;
+    transform: none;
+  }
+
+  @starting-style {
+    .menu-drawer[open] {
+      transform: translateX(-100%);
+    }
+  }
+
+  .menu-drawer::backdrop {
+    background-color: rgb(11 15 20 / 0);
+    transition:
+      background-color var(--duration-base) var(--ease-out),
+      overlay var(--duration-base) allow-discrete,
+      display var(--duration-base) allow-discrete;
+  }
+
+  .menu-drawer[open]::backdrop {
+    background-color: rgb(11 15 20 / 0.55);
+  }
+
+  @starting-style {
+    .menu-drawer[open]::backdrop {
+      background-color: rgb(11 15 20 / 0);
+    }
+  }
+
+  .menu-drawer__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: var(--header-height);
+    padding-inline: var(--gutter) calc(var(--gutter) - var(--space-3));
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .menu-drawer__nav {
+    padding-inline: var(--gutter);
+  }
+
+  .menu-drawer__menu > li {
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .menu-drawer__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: 3.5rem;
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+    font-size: 1.125rem;
+    text-decoration: none;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .menu-drawer__link::-webkit-details-marker {
+    display: none;
+  }
+
+  .menu-drawer__link[aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  .menu-drawer__link .icon {
+    --icon-size: 1.25rem;
+    color: var(--color-text-muted);
+  }
+
+  .menu-drawer__details[open] .menu-drawer__chevron {
+    transform: rotate(180deg);
+  }
+
+  .menu-drawer__submenu {
+    padding-block-end: var(--space-3);
+  }
+
+  .menu-drawer__sublink {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: var(--touch-target);
+    text-decoration: none;
+  }
+
+  .menu-drawer__sublink[aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  .menu-drawer__secondary,
+  .menu-drawer__hint {
+    padding: var(--space-6) var(--gutter) 0;
+  }
+
+  .menu-drawer__secondary h3 {
+    margin-block-end: var(--space-2);
+  }
+
+  .menu-drawer__footer {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: auto;
+    padding: var(--space-6) var(--gutter) var(--space-6);
+    padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+  }
+
+  @media (min-width: 1200px) {
+    .menu-drawer {
+      display: none;
     }
   }
 {% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    // Fallback for invoker commands (command/commandfor) in older browsers
+    if (!('commandForElement' in HTMLButtonElement.prototype)) {
+      document.addEventListener('click', (event) => {
+        const button = event.target.closest('button[commandfor]');
+        if (!button) return;
+        const target = document.getElementById(button.getAttribute('commandfor'));
+        if (!(target instanceof HTMLDialogElement)) return;
+        const command = button.getAttribute('command');
+        if (command === 'show-modal' && !target.open) target.showModal();
+        if (command === 'close' && target.open) target.close();
+      });
+    }
+
+    // Light dismiss: a click on the backdrop closes the dialog (fallback for closedby="any")
+    document.addEventListener('click', (event) => {
+      const dialog = event.target;
+      if (!(dialog instanceof HTMLDialogElement) || !dialog.open || !dialog.hasAttribute('data-light-dismiss')) return;
+      const rect = dialog.getBoundingClientRect();
+      const inside =
+        event.clientX >= rect.left && event.clientX <= rect.right && event.clientY >= rect.top && event.clientY <= rect.bottom;
+      if (!inside) dialog.close();
+    });
+
+    // Close the menu drawer when the layout switches to desktop navigation
+    const desktop = window.matchMedia('(min-width: 1200px)');
+    desktop.addEventListener('change', (event) => {
+      if (!event.matches) return;
+      document.querySelectorAll('dialog.menu-drawer[open]').forEach((dialog) => dialog.close());
+    });
+
+    // Desktop dropdowns: close on outside click and on Escape (focus returns to the trigger)
+    document.addEventListener('click', (event) => {
+      document.querySelectorAll('details.nav-dropdown[open]').forEach((details) => {
+        if (!details.contains(event.target)) details.removeAttribute('open');
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      const open = document.querySelector('details.nav-dropdown[open]');
+      if (!open) return;
+      open.removeAttribute('open');
+      open.querySelector('summary')?.focus();
+    });
+  })();
+{% endjavascript %}
 
 {% schema %}
 {
@@ -159,16 +597,33 @@
       "default": "scheme-1"
     },
     {
-      "type": "link_list",
-      "id": "menu",
-      "label": "t:sections.header.menu",
-      "default": "main-menu"
+      "type": "checkbox",
+      "id": "sticky",
+      "label": "t:sections.header.sticky",
+      "default": true
     },
     {
       "type": "link_list",
-      "id": "customer_account_menu",
-      "label": "t:sections.header.customer_account_menu",
-      "default": "customer-account-main-menu"
+      "id": "menu",
+      "label": "t:sections.header.menu",
+      "info": "t:sections.header.menu_info",
+      "default": "main-menu"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.header.drawer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_all_products",
+      "label": "t:sections.header.show_all_products",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "drawer_menu",
+      "label": "t:sections.header.drawer_menu",
+      "info": "t:sections.header.drawer_menu_info"
     }
   ]
 }

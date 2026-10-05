@@ -2,14 +2,24 @@
   "type": "header",
   "name": "Header",
   "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {
+        "color_scheme": "scheme-3",
+        "text": "",
+        "link": ""
+      }
+    },
     "header": {
       "type": "header",
       "settings": {
         "color_scheme": "scheme-1",
+        "sticky": true,
         "menu": "main-menu",
-        "customer_account_menu": "customer-account-main-menu"
+        "show_all_products": true,
+        "drawer_menu": "footer-service"
       }
     }
   },
-  "order": ["header"]
+  "order": ["announcement", "header"]
 }

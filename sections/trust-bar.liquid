@@ -1,0 +1,215 @@
+{% comment %}
+  Trust bar with three block types:
+  - shipping: free-shipping text built from Theme settings → Shipping
+  - item: free trust item (icon, title, text)
+  - payment: payment icons loaded dynamically from Shopify
+{% endcomment %}
+
+{%- if section.blocks.size > 0 -%}
+  <div class="trust-bar section color-{{ section.settings.color_scheme }}">
+    <div class="page-width">
+      <ul class="trust-bar__list" role="list">
+        {%- for block in section.blocks -%}
+          <li class="trust-item" {{ block.shopify_attributes }}>
+            {%- case block.type -%}
+              {%- when 'shipping' -%}
+                {%- assign amount = settings.free_shipping_threshold | times: 100 | money_without_trailing_zeros -%}
+                {% render 'icon', name: 'truck', class: 'trust-item__icon' %}
+                <div class="trust-item__text">
+                  <p class="trust-item__title">{{ 'sections.trust_bar.free_shipping' | t: amount: amount }}</p>
+                  {%- if block.settings.text != blank -%}
+                    <p class="trust-item__subtitle">{{ block.settings.text }}</p>
+                  {%- endif -%}
+                </div>
+
+              {%- when 'item' -%}
+                {%- if block.settings.icon != 'none' -%}
+                  {% render 'icon', name: block.settings.icon, class: 'trust-item__icon' %}
+                {%- endif -%}
+                <div class="trust-item__text">
+                  <p class="trust-item__title">{{ block.settings.title }}</p>
+                  {%- if block.settings.text != blank -%}
+                    <p class="trust-item__subtitle">{{ block.settings.text }}</p>
+                  {%- endif -%}
+                </div>
+
+              {%- when 'payment' -%}
+                {% render 'icon', name: 'lock', class: 'trust-item__icon' %}
+                <div class="trust-item__text">
+                  <p class="trust-item__title">{{ block.settings.title }}</p>
+                  {%- if shop.enabled_payment_types.size > 0 -%}
+                    <ul class="trust-item__payments" role="list" aria-label="{{ 'footer.payment_methods' | t }}">
+                      {%- for type in shop.enabled_payment_types limit: block.settings.max_icons -%}
+                        <li>{{ type | payment_type_svg_tag: class: 'trust-item__payment-icon' }}</li>
+                      {%- endfor -%}
+                    </ul>
+                  {%- endif -%}
+                </div>
+            {%- endcase -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .trust-bar {
+    padding-block: var(--space-6);
+  }
+
+  .trust-bar__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    gap: var(--space-5) var(--space-4);
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .trust-item__icon {
+    --icon-size: 1.75rem;
+    color: var(--color-accent);
+  }
+
+  .trust-item__text {
+    display: grid;
+    gap: var(--space-1);
+    min-width: 0;
+  }
+
+  .trust-item__title {
+    font-weight: var(--font-body-weight-bold);
+    line-height: 1.35;
+  }
+
+  .trust-item__subtitle {
+    color: var(--color-text-muted);
+    font-size: var(--fs-small);
+    line-height: 1.45;
+  }
+
+  .trust-item__payments {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    margin-top: var(--space-1);
+  }
+
+  .trust-item__payment-icon {
+    width: 2.25rem;
+    height: auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.trust_bar.name",
+  "class": "section-trust-bar",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shipping",
+      "name": "t:sections.trust_bar.blocks.shipping.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.trust_bar.blocks.shipping.info"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:common.text",
+          "default": "Innerhalb Deutschlands"
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "name": "t:sections.trust_bar.blocks.item.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:common.icon",
+          "options": [
+            { "value": "none", "label": "t:common.icons.none" },
+            { "value": "truck", "label": "t:common.icons.truck" },
+            { "value": "return", "label": "t:common.icons.return" },
+            { "value": "lock", "label": "t:common.icons.lock" },
+            { "value": "credit-card", "label": "t:common.icons.credit_card" },
+            { "value": "shield-check", "label": "t:common.icons.shield_check" },
+            { "value": "car", "label": "t:common.icons.car" },
+            { "value": "ruler", "label": "t:common.icons.ruler" },
+            { "value": "wrench", "label": "t:common.icons.wrench" },
+            { "value": "lightbulb", "label": "t:common.icons.lightbulb" },
+            { "value": "palette", "label": "t:common.icons.palette" },
+            { "value": "plug", "label": "t:common.icons.plug" },
+            { "value": "sparkle", "label": "t:common.icons.sparkle" },
+            { "value": "mail", "label": "t:common.icons.mail" },
+            { "value": "check", "label": "t:common.icons.check" },
+            { "value": "info", "label": "t:common.icons.info" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:common.title",
+          "default": "Vorteil"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "t:common.text"
+        }
+      ]
+    },
+    {
+      "type": "payment",
+      "name": "t:sections.trust_bar.blocks.payment.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:common.title",
+          "default": "Sichere Zahlung"
+        },
+        {
+          "type": "range",
+          "id": "max_icons",
+          "min": 2,
+          "max": 10,
+          "step": 1,
+          "label": "t:sections.trust_bar.blocks.payment.max_icons",
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.trust_bar.name",
+      "blocks": [
+        { "type": "shipping" },
+        { "type": "item", "settings": { "icon": "return", "title": "14 Tage Widerrufsrecht", "text": "Gesetzliches Widerrufsrecht für Verbraucher" } },
+        { "type": "item", "settings": { "icon": "car", "title": "Lieferung nach DE, AT & CH", "text": "" } },
+        { "type": "payment" }
+      ]
+    }
+  ]
+}
+{% endschema %}

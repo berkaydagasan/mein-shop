@@ -1,0 +1,88 @@
+{% doc %}
+  Renders a product price according to German price display rules:
+  "ab" price when variants differ, sale price with struck-through
+  compare-at price (screen-reader labelled), unit price (Grundpreis, PAngV)
+  when set on the variant, and an optional tax/shipping note.
+
+  Note: only use compare-at prices that comply with § 11 PAngV
+  (lowest price of the last 30 days).
+
+  @param {product} product - The product
+  @param {boolean} [show_tax_note] - Show "inkl. MwSt., zzgl. Versand" below the price
+  @param {string} [class] - Additional classes
+
+  @example
+  {% render 'price', product: product, show_tax_note: true %}
+{% enddoc %}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+  assign price = product.price | money
+  if product.price_varies
+    assign price = 'products.price_from' | t: price: price
+  endif
+-%}
+
+<div class="price{% if on_sale %} price--sale{% endif %}{% if class != blank %} {{ class }}{% endif %}">
+  <p class="price__line">
+    {%- if on_sale -%}
+      <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
+      <span class="price__current">{{ price }}</span>
+      <span class="visually-hidden">{{ 'products.regular_price' | t }}</span>
+      <s class="price__compare">{{ product.compare_at_price | money }}</s>
+    {%- else -%}
+      <span class="price__current">{{ price }}</span>
+    {%- endif -%}
+  </p>
+
+  {%- if variant.unit_price_measurement -%}
+    <p class="price__unit">
+      <span class="visually-hidden">{{ 'products.unit_price' | t }}</span>
+      {{ variant.unit_price | money }}
+      /
+      {%- if variant.unit_price_measurement.reference_value != 1 -%}
+        {{ variant.unit_price_measurement.reference_value }}
+      {%- endif %}
+      {{ variant.unit_price_measurement.reference_unit }}
+    </p>
+  {%- endif -%}
+
+  {%- if show_tax_note -%}
+    <p class="price__note">{{ 'products.tax_note' | t }}</p>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .price {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .price__line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--space-2);
+    font-weight: var(--font-body-weight-bold);
+  }
+
+  .price--sale .price__current {
+    color: var(--color-sale);
+  }
+
+  .price__compare {
+    color: var(--color-text-muted);
+    font-weight: var(--font-body-weight);
+  }
+
+  .price__unit,
+  .price__note {
+    color: var(--color-text-muted);
+    font-size: var(--fs-small);
+    line-height: 1.4;
+  }
+{% endstylesheet %}

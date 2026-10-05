@@ -1,0 +1,74 @@
+{% doc %}
+  Renders a consistent section heading: optional eyebrow, heading (h2 by
+  default), optional rich text and an optional "view all" style link.
+  Renders nothing when heading, eyebrow and text are all blank.
+
+  @param {string} [eyebrow] - Small uppercase label above the heading
+  @param {string} [heading] - Heading text
+  @param {string} [text] - Rich text (HTML) below the heading
+  @param {string} [link_label] - Label of the link next to the heading
+  @param {string} [link_url] - Target of the link
+  @param {string} [align] - 'left' (default) or 'center'
+  @param {string} [id] - Optional id for the heading (for aria-labelledby)
+
+  @example
+  {% render 'section-heading', eyebrow: section.settings.eyebrow, heading: section.settings.heading, id: heading_id %}
+{% enddoc %}
+
+{%- assign align = align | default: 'left' -%}
+
+{%- if heading != blank or eyebrow != blank or text != blank -%}
+  <div class="section-heading section-heading--{{ align }}">
+    <div class="section-heading__content stack" style="--stack-space: var(--space-3);">
+      {%- if eyebrow != blank -%}
+        <p class="eyebrow section-heading__eyebrow">{{ eyebrow }}</p>
+      {%- endif -%}
+      {%- if heading != blank -%}
+        <h2 class="h2"{% if id != blank %} id="{{ id }}"{% endif %}>{{ heading }}</h2>
+      {%- endif -%}
+      {%- if text != blank -%}
+        <div class="rte text-muted section-heading__text">{{ text }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if link_label != blank and link_url != blank -%}
+      <a class="button button--link section-heading__link" href="{{ link_url }}">
+        {{- link_label -}}
+        {% render 'icon', name: 'arrow-right' %}
+      </a>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-3) var(--space-6);
+    margin-block-end: var(--space-7);
+  }
+
+  .section-heading__content {
+    max-width: 44rem;
+  }
+
+  .section-heading__eyebrow {
+    color: var(--color-accent);
+  }
+
+  .section-heading--center {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .section-heading--center .section-heading__content {
+    margin-inline: auto;
+  }
+
+  .section-heading--center .section-heading__text {
+    margin-inline: auto;
+  }
+{% endstylesheet %}

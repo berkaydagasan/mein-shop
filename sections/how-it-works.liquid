@@ -1,0 +1,192 @@
+{% comment %}
+  "So funktioniert's": numbered steps (ordered list) with optional icon
+  and an optional button, e.g. to the installation & compatibility page.
+{% endcomment %}
+
+{%- assign heading_id = 'Heading-' | append: section.id -%}
+
+<div class="section color-{{ section.settings.color_scheme }}{% if section.settings.glow %} glow{% endif %}">
+  <div class="page-width" role="region" aria-labelledby="{{ heading_id }}">
+    {% render 'section-heading',
+      eyebrow: section.settings.eyebrow,
+      heading: section.settings.heading,
+      text: section.settings.text,
+      align: 'center',
+      id: heading_id
+    %}
+
+    {%- if section.blocks.size > 0 -%}
+      <ol class="grid steps" role="list" style="--cols-mobile: 1; --cols-tablet: {{ section.blocks.size | at_most: 3 }}; --cols-desktop: {{ section.blocks.size | at_most: 4 }};">
+        {%- for block in section.blocks -%}
+          <li class="step reveal" {{ block.shopify_attributes }}>
+            <div class="step__marker">
+              <span class="step__number" aria-hidden="true">{{ forloop.index }}</span>
+              {%- if block.settings.icon != 'none' -%}
+                {% render 'icon', name: block.settings.icon, class: 'step__icon' %}
+              {%- endif -%}
+            </div>
+            <h3 class="h4">
+              <span class="visually-hidden">{{ 'sections.how_it_works.step' | t: number: forloop.index }}:</span>
+              {{ block.settings.title }}
+            </h3>
+            {%- if block.settings.text != blank -%}
+              <div class="rte text-muted step__text">{{ block.settings.text }}</div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ol>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <p class="steps__cta">
+        <a class="button button--secondary" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+      </p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .step {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-m);
+    background-color: var(--color-surface);
+  }
+
+  .step__marker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-block-end: var(--space-2);
+  }
+
+  .step__number {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    font-family: var(--font-heading-family);
+    font-weight: var(--font-heading-weight);
+    font-size: 1.125rem;
+  }
+
+  .step__icon {
+    --icon-size: 1.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .step__text {
+    font-size: var(--fs-small);
+    line-height: 1.55;
+  }
+
+  .steps__cta {
+    display: flex;
+    justify-content: center;
+    margin-block-start: var(--space-7);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.how_it_works.name",
+  "class": "section-how-it-works",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "checkbox",
+      "id": "glow",
+      "label": "t:common.glow",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:common.eyebrow",
+      "default": "So funktioniert’s"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:common.heading",
+      "default": "In drei Schritten zu deinem Ambientelicht"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:common.text"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:common.button_label",
+      "default": "Einbau & Kompatibilität"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:common.button_link",
+      "info": "t:sections.how_it_works.button_link_info"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "t:sections.how_it_works.blocks.step.name",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "t:common.icon",
+          "options": [
+            { "value": "none", "label": "t:common.icons.none" },
+            { "value": "car", "label": "t:common.icons.car" },
+            { "value": "ruler", "label": "t:common.icons.ruler" },
+            { "value": "wrench", "label": "t:common.icons.wrench" },
+            { "value": "lightbulb", "label": "t:common.icons.lightbulb" },
+            { "value": "palette", "label": "t:common.icons.palette" },
+            { "value": "plug", "label": "t:common.icons.plug" },
+            { "value": "sparkle", "label": "t:common.icons.sparkle" },
+            { "value": "check", "label": "t:common.icons.check" },
+            { "value": "truck", "label": "t:common.icons.truck" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "t:common.title",
+          "default": "Schritt"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "t:common.text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.how_it_works.name",
+      "blocks": [
+        { "type": "step" },
+        { "type": "step" },
+        { "type": "step" }
+      ]
+    }
+  ]
+}
+{% endschema %}

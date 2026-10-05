@@ -1,6 +1,7 @@
 {
   "general": {
-    "placeholder_image": "Platzhalterbild"
+    "placeholder_image": "Platzhalterbild",
+    "placeholder": "Platzhalter"
   },
   "accessibility": {
     "skip_to_content": "Zum Inhalt springen",
@@ -47,11 +48,24 @@
     "sold_out": "Ausverkauft",
     "tax_note": "inkl. MwSt., zzgl. Versandkosten",
     "tax_note_html": "inkl. MwSt., zzgl. {{ link }}",
-    "variant": "Ausführung"
+    "variant": "Ausführung",
+    "badge_new": "Neu",
+    "badge_sale": "Sale",
+    "choose_options": "Optionen wählen",
+    "unit_price": "Grundpreis",
+    "variant_count": {
+      "one": "{{ count }} Variante",
+      "other": "{{ count }} Varianten"
+    },
+    "placeholder_card": "Platzhalter-Produktkarte",
+    "placeholder_title": "[PLATZHALTER] Produktname",
+    "placeholder_price": "Preis folgt"
   },
   "collections": {
     "title": "Kollektionen",
-    "empty": "Diese Kollektion enthält noch keine Produkte."
+    "empty": "Diese Kollektion enthält noch keine Produkte.",
+    "explore": "Entdecken",
+    "placeholder_title": "[PLATZHALTER] Kollektion"
   },
   "search": {
     "title": "Suche",
@@ -105,5 +119,35 @@
   },
   "announcement": {
     "free_shipping": "Gratisversand ab {{ amount }} innerhalb Deutschlands"
+  },
+  "newsletter": {
+    "label": "E-Mail-Adresse",
+    "submit": "Anmelden",
+    "privacy_policy": "Datenschutzerklärung",
+    "consent_html": "Mit deiner Anmeldung willigst du ein, dass wir dir Neuheiten und Tipps per E-Mail senden. Die Abmeldung ist jederzeit möglich. Mehr dazu in unserer {{ link }}."
+  },
+  "sections": {
+    "hero": {
+      "highlight": "Produkt-Highlight"
+    },
+    "trust_bar": {
+      "free_shipping": "Gratisversand ab {{ amount }}"
+    },
+    "featured_collection": {
+      "empty_hint": "Hinweis (nur im Editor sichtbar): Wähle eine Kollektion mit Produkten oder aktiviere „Platzhalter anzeigen“."
+    },
+    "how_it_works": {
+      "step": "Schritt {{ number }}"
+    },
+    "social_proof": {
+      "empty_hint": "Hinweis (nur im Editor sichtbar): Diese Section erscheint erst, wenn echte Bewertungen oder Presse-Logos als Blöcke hinzugefügt wurden.",
+      "disclosure_missing": "Hinweis (nur im Editor sichtbar): Bitte ergänze einen Hinweis, ob und wie die Bewertungen auf Echtheit geprüft werden (§ 5b Abs. 3 UWG)."
+    },
+    "collection_list": {
+      "empty_hint": "Hinweis (nur im Editor sichtbar): Keine der gewählten Kollektionen enthält Produkte. Aktiviere „Platzhalter anzeigen“ oder wähle andere Kollektionen."
+    },
+    "blog_posts": {
+      "empty_hint": "Hinweis (nur im Editor sichtbar): Wähle einen Blog mit veröffentlichten Artikeln. Bis dahin bleibt diese Section unsichtbar."
+    }
   }
 }

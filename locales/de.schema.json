@@ -138,6 +138,180 @@
       "text": "Text",
       "text_info": "Leer lassen für den automatischen Text „Gratisversand ab … innerhalb Deutschlands“ aus Theme-Einstellungen → Versand.",
       "link": "Link (optional)"
+    },
+    "hero": {
+      "name": "Hero",
+      "image_info": "Hauptbild und LCP-Element: wird sofort und mit hoher Priorität geladen. Empfohlen: 2560 × 1440 px, dunkle Innenraum-Aufnahme.",
+      "video": "Video (optional)",
+      "video_info": "Wird stumm abgespielt und nur gestartet, wenn Besucher keine reduzierte Bewegung eingestellt haben. Das Bild bleibt als Vorschau sichtbar.",
+      "overlay": "Abdunklung",
+      "overlay_info": "Sorgt für lesbaren Text auf dem Bild.",
+      "height": "Höhe",
+      "height_small": "Klein",
+      "height_medium": "Mittel",
+      "height_large": "Groß",
+      "height_screen": "Bildschirmhöhe",
+      "heading": "Überschrift (H1)",
+      "heading_info": "Die einzige H1 der Startseite – wichtig für SEO.",
+      "highlight_header": "Produkt-Highlight",
+      "highlight_product": "Produkt",
+      "highlight_product_info": "Optional: kleine Produktkarte im Hero."
+    },
+    "trust_bar": {
+      "name": "Trust-Bar",
+      "blocks": {
+        "shipping": {
+          "name": "Gratisversand (auto)",
+          "info": "Der Betrag kommt automatisch aus Theme-Einstellungen → Versand."
+        },
+        "item": {
+          "name": "Vertrauenspunkt"
+        },
+        "payment": {
+          "name": "Zahlungsarten",
+          "max_icons": "Maximale Anzahl Icons"
+        }
+      }
+    },
+    "featured_collection": {
+      "name": "Hervorgehobene Kollektion",
+      "view_all_label": "Text „Alle ansehen“",
+      "collection_info": "Empfohlen: Kollektion „bestseller“.",
+      "products_to_show": "Anzahl Produkte",
+      "show_secondary_image": "Zweites Bild bei Hover zeigen",
+      "show_quick_add": "Schnellkauf-Button zeigen",
+      "show_quick_add_info": "Bei Produkten ohne Varianten direkt „In den Warenkorb“, sonst „Optionen wählen“."
+    },
+    "benefits": {
+      "name": "Vorteile",
+      "blocks": {
+        "benefit": {
+          "name": "Vorteil"
+        }
+      }
+    },
+    "how_it_works": {
+      "name": "So funktioniert’s",
+      "button_link_info": "Empfohlen: Seite „Einbau & Kompatibilität“. Ohne Link wird kein Button angezeigt.",
+      "blocks": {
+        "step": {
+          "name": "Schritt"
+        }
+      }
+    },
+    "image_with_text": {
+      "name": "Bild mit Text (Story)"
+    },
+    "social_proof": {
+      "name": "Social Proof",
+      "info": "Nur echte Bewertungen und Presse-Erwähnungen verwenden. Die Section erscheint erst, wenn Blöcke vorhanden sind.",
+      "disclosure": "Hinweis zur Echtheit der Bewertungen",
+      "disclosure_info": "Pflichtangabe nach § 5b Abs. 3 UWG, ob und wie Bewertungen überprüft werden.",
+      "blocks": {
+        "review": {
+          "name": "Bewertung",
+          "quote": "Bewertungstext",
+          "author": "Name",
+          "detail": "Zusatz (optional)",
+          "detail_info": "z. B. Produkt oder Datum der Bewertung."
+        },
+        "logo": {
+          "name": "Presse-Logo",
+          "image": "Logo",
+          "name_label": "Name",
+          "name_info": "Wird als Alternativtext bzw. ohne Logo als Text angezeigt.",
+          "link": "Link zum Artikel (optional)"
+        }
+      }
+    },
+    "collection_list": {
+      "name": "Kollektions-Teaser",
+      "show_placeholders_info": "Kacheln leerer Kollektionen werden ausgeblendet. Nur wenn alle leer sind, erscheinen markierte Platzhalter.",
+      "blocks": {
+        "collection": {
+          "name": "Kollektion",
+          "title_info": "Leer lassen, um den Kollektionsnamen zu verwenden.",
+          "image_info": "Leer lassen, um das Kollektionsbild zu verwenden."
+        }
+      }
+    },
+    "faq": {
+      "name": "FAQ",
+      "blocks": {
+        "question": {
+          "name": "Frage",
+          "question": "Frage",
+          "answer": "Antwort"
+        }
+      }
+    },
+    "blog_posts": {
+      "name": "Ratgeber-Teaser",
+      "blog": "Blog",
+      "post_limit": "Anzahl Artikel"
+    },
+    "newsletter": {
+      "name": "Newsletter",
+      "info": "Nutzt das Shopify-Kundenformular. Empfohlen: Double-Opt-in im Admin aktivieren.",
+      "success_message": "Erfolgsmeldung"
+    },
+    "cta_banner": {
+      "name": "Abschluss-CTA",
+      "image": "Hintergrundbild (optional)",
+      "image_info": "Wird automatisch abgedunkelt."
+    }
+  },
+  "common": {
+    "media": "Medien",
+    "layout": "Layout",
+    "content": "Inhalt",
+    "products": "Produkte",
+    "image": "Bild",
+    "image_mobile": "Bild mobil (optional)",
+    "image_mobile_info": "Eigenes Bild für Smartphones, empfohlen im Hochformat 4:5.",
+    "eyebrow": "Überzeile",
+    "heading": "Überschrift",
+    "text": "Text",
+    "title": "Titel",
+    "icon": "Icon",
+    "button_label": "Button-Text",
+    "button_link": "Button-Link",
+    "button_secondary_label": "Zweiter Button – Text",
+    "button_secondary_link": "Zweiter Button – Link",
+    "link_label": "Link-Text",
+    "link_url": "Link",
+    "alignment": "Ausrichtung",
+    "align_left": "Links",
+    "align_center": "Zentriert",
+    "align_right": "Rechts",
+    "image_position": "Bildposition",
+    "image_ratio": "Bildformat",
+    "ratio_square": "Quadratisch (1:1)",
+    "ratio_portrait": "Hochformat (4:5)",
+    "ratio_landscape": "Querformat (3:2)",
+    "collection": "Kollektion",
+    "columns_desktop": "Spalten Desktop",
+    "columns_mobile": "Spalten mobil",
+    "show_placeholders": "Platzhalter anzeigen, solange keine Produkte vorhanden sind",
+    "show_placeholders_info": "Deutlich als Platzhalter markiert. Verschwindet automatisch, sobald Produkte vorhanden sind. Ausgeschaltet wird die Section stattdessen ausgeblendet.",
+    "glow": "Dezenter Akzent-Schein",
+    "icons": {
+      "none": "Kein Icon",
+      "truck": "Versand (LKW)",
+      "return": "Rückgabe",
+      "lock": "Schloss (Sicherheit)",
+      "credit_card": "Kreditkarte",
+      "shield_check": "Schild mit Haken",
+      "car": "Auto",
+      "ruler": "Lineal (Maß)",
+      "wrench": "Schraubenschlüssel (Einbau)",
+      "lightbulb": "Glühbirne (Licht)",
+      "palette": "Farbpalette",
+      "plug": "Stecker (Strom)",
+      "sparkle": "Funkeln",
+      "mail": "E-Mail",
+      "check": "Haken",
+      "info": "Info"
     }
   }
 }

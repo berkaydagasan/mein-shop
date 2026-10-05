@@ -1,0 +1,193 @@
+{% comment %}
+  Featured collection (e.g. Bestseller). While the selected collection is
+  empty or missing, clearly marked placeholder cards are shown (can be
+  switched off – the section then hides itself). Placeholders disappear
+  automatically as soon as the collection contains products.
+{% endcomment %}
+
+{%- liquid
+  assign collection = section.settings.collection
+  assign limit = section.settings.products_to_show
+  assign has_products = false
+  if collection != blank and collection.products_count > 0
+    assign has_products = true
+  endif
+  assign heading_id = 'Heading-' | append: section.id
+
+  case section.settings.columns_desktop
+    when '3'
+      assign sizes = '(min-width: 990px) 33vw, (min-width: 750px) 33vw, 50vw'
+    else
+      assign sizes = '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
+  endcase
+  if section.settings.columns_mobile == '1'
+    assign sizes = sizes | replace: '50vw', '100vw'
+  endif
+-%}
+
+{%- if has_products or section.settings.show_placeholders -%}
+  <div class="section color-{{ section.settings.color_scheme }}">
+    <div class="page-width" role="region" aria-labelledby="{{ heading_id }}">
+      {%- liquid
+        assign view_all_url = blank
+        if has_products
+          assign view_all_url = collection.url
+        endif
+      -%}
+      {% render 'section-heading',
+        eyebrow: section.settings.eyebrow,
+        heading: section.settings.heading,
+        text: section.settings.text,
+        link_label: section.settings.view_all_label,
+        link_url: view_all_url,
+        id: heading_id
+      %}
+
+      <ul
+        class="grid"
+        role="list"
+        style="--cols-mobile: {{ section.settings.columns_mobile }}; --cols-tablet: 3; --cols-desktop: {{ section.settings.columns_desktop }};"
+      >
+        {%- if has_products -%}
+          {%- for product in collection.products limit: limit -%}
+            <li class="reveal">
+              {% render 'product-card',
+                product: product,
+                ratio: section.settings.image_ratio,
+                sizes: sizes,
+                show_secondary_image: section.settings.show_secondary_image,
+                show_quick_add: section.settings.show_quick_add
+              %}
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..limit) -%}
+            <li>
+              {% render 'product-card', product: blank, ratio: section.settings.image_ratio, placeholder_index: i %}
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+    </div>
+  </div>
+{%- elsif request.design_mode -%}
+  <div class="page-width section">
+    <p class="text-muted text-small">{{ 'sections.featured_collection.empty_hint' | t }}</p>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.featured_collection.name",
+  "class": "section-featured-collection",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:common.eyebrow",
+      "default": "Bestseller"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:common.heading",
+      "default": "Beliebte Ambiente-Lichtsets"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:common.text"
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "t:sections.featured_collection.view_all_label",
+      "default": "Alle ansehen"
+    },
+    {
+      "type": "header",
+      "content": "t:common.products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:common.collection",
+      "info": "t:sections.featured_collection.collection_info"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "t:sections.featured_collection.products_to_show",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_placeholders",
+      "label": "t:common.show_placeholders",
+      "info": "t:common.show_placeholders_info",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:common.layout"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "t:common.columns_desktop",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "t:common.columns_mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:common.image_ratio",
+      "options": [
+        { "value": "1 / 1", "label": "t:common.ratio_square" },
+        { "value": "4 / 5", "label": "t:common.ratio_portrait" }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "t:sections.featured_collection.show_secondary_image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "t:sections.featured_collection.show_quick_add",
+      "info": "t:sections.featured_collection.show_quick_add_info",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_collection.name"
+    }
+  ]
+}
+{% endschema %}

@@ -138,6 +138,180 @@
       "text": "Text",
       "text_info": "Leave empty for the automatic free shipping text from Theme settings → Shipping.",
       "link": "Link (optional)"
+    },
+    "hero": {
+      "name": "Hero",
+      "image_info": "Main image and LCP element: loaded immediately with high priority. Recommended: 2560 × 1440 px, dark interior shot.",
+      "video": "Video (optional)",
+      "video_info": "Plays muted and only starts when visitors have not requested reduced motion. The image stays visible as poster.",
+      "overlay": "Overlay",
+      "overlay_info": "Keeps text readable on the image.",
+      "height": "Height",
+      "height_small": "Small",
+      "height_medium": "Medium",
+      "height_large": "Large",
+      "height_screen": "Screen height",
+      "heading": "Heading (H1)",
+      "heading_info": "The only H1 on the home page – important for SEO.",
+      "highlight_header": "Product highlight",
+      "highlight_product": "Product",
+      "highlight_product_info": "Optional: small product card in the hero."
+    },
+    "trust_bar": {
+      "name": "Trust bar",
+      "blocks": {
+        "shipping": {
+          "name": "Free shipping (auto)",
+          "info": "The amount comes from Theme settings → Shipping."
+        },
+        "item": {
+          "name": "Trust item"
+        },
+        "payment": {
+          "name": "Payment methods",
+          "max_icons": "Maximum number of icons"
+        }
+      }
+    },
+    "featured_collection": {
+      "name": "Featured collection",
+      "view_all_label": "\"View all\" label",
+      "collection_info": "Recommended: collection \"bestseller\".",
+      "products_to_show": "Number of products",
+      "show_secondary_image": "Show second image on hover",
+      "show_quick_add": "Show quick add button",
+      "show_quick_add_info": "Products without variants get \"Add to cart\", others \"Choose options\"."
+    },
+    "benefits": {
+      "name": "Benefits",
+      "blocks": {
+        "benefit": {
+          "name": "Benefit"
+        }
+      }
+    },
+    "how_it_works": {
+      "name": "How it works",
+      "button_link_info": "Recommended: the installation & compatibility page. Without a link no button is shown.",
+      "blocks": {
+        "step": {
+          "name": "Step"
+        }
+      }
+    },
+    "image_with_text": {
+      "name": "Image with text (story)"
+    },
+    "social_proof": {
+      "name": "Social proof",
+      "info": "Only use genuine reviews and press mentions. The section appears once blocks exist.",
+      "disclosure": "Review authenticity note",
+      "disclosure_info": "Required under § 5b (3) UWG: whether and how reviews are verified.",
+      "blocks": {
+        "review": {
+          "name": "Review",
+          "quote": "Review text",
+          "author": "Name",
+          "detail": "Detail (optional)",
+          "detail_info": "E.g. product or review date."
+        },
+        "logo": {
+          "name": "Press logo",
+          "image": "Logo",
+          "name_label": "Name",
+          "name_info": "Used as alt text, or shown as text without a logo.",
+          "link": "Link to article (optional)"
+        }
+      }
+    },
+    "collection_list": {
+      "name": "Collection teaser",
+      "show_placeholders_info": "Tiles of empty collections are hidden. Only when all are empty, marked placeholders appear.",
+      "blocks": {
+        "collection": {
+          "name": "Collection",
+          "title_info": "Leave empty to use the collection title.",
+          "image_info": "Leave empty to use the collection image."
+        }
+      }
+    },
+    "faq": {
+      "name": "FAQ",
+      "blocks": {
+        "question": {
+          "name": "Question",
+          "question": "Question",
+          "answer": "Answer"
+        }
+      }
+    },
+    "blog_posts": {
+      "name": "Blog posts",
+      "blog": "Blog",
+      "post_limit": "Number of articles"
+    },
+    "newsletter": {
+      "name": "Newsletter",
+      "info": "Uses the Shopify customer form. Recommended: enable double opt-in in the admin.",
+      "success_message": "Success message"
+    },
+    "cta_banner": {
+      "name": "Final call to action",
+      "image": "Background image (optional)",
+      "image_info": "Darkened automatically."
+    }
+  },
+  "common": {
+    "media": "Media",
+    "layout": "Layout",
+    "content": "Content",
+    "products": "Products",
+    "image": "Image",
+    "image_mobile": "Mobile image (optional)",
+    "image_mobile_info": "Separate image for smartphones, ideally portrait 4:5.",
+    "eyebrow": "Eyebrow",
+    "heading": "Heading",
+    "text": "Text",
+    "title": "Title",
+    "icon": "Icon",
+    "button_label": "Button label",
+    "button_link": "Button link",
+    "button_secondary_label": "Second button label",
+    "button_secondary_link": "Second button link",
+    "link_label": "Link label",
+    "link_url": "Link",
+    "alignment": "Alignment",
+    "align_left": "Left",
+    "align_center": "Center",
+    "align_right": "Right",
+    "image_position": "Image position",
+    "image_ratio": "Image ratio",
+    "ratio_square": "Square (1:1)",
+    "ratio_portrait": "Portrait (4:5)",
+    "ratio_landscape": "Landscape (3:2)",
+    "collection": "Collection",
+    "columns_desktop": "Columns on desktop",
+    "columns_mobile": "Columns on mobile",
+    "show_placeholders": "Show placeholders while there are no products",
+    "show_placeholders_info": "Clearly marked as placeholders. Disappear automatically once products exist. When off, the section is hidden instead.",
+    "glow": "Subtle accent glow",
+    "icons": {
+      "none": "No icon",
+      "truck": "Shipping (truck)",
+      "return": "Return",
+      "lock": "Lock (security)",
+      "credit_card": "Credit card",
+      "shield_check": "Shield with check",
+      "car": "Car",
+      "ruler": "Ruler (size)",
+      "wrench": "Wrench (installation)",
+      "lightbulb": "Light bulb",
+      "palette": "Palette",
+      "plug": "Plug (power)",
+      "sparkle": "Sparkle",
+      "mail": "Email",
+      "check": "Check",
+      "info": "Info"
     }
   }
 }

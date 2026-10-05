@@ -1,9 +1,312 @@
 {
   "sections": {
-    "styleguide": {
-      "type": "styleguide",
-      "settings": {}
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "color_scheme": "scheme-3",
+        "overlay_opacity": 40,
+        "height": "large",
+        "content_position": "left",
+        "eyebrow": "",
+        "heading": "Ambientebeleuchtung für dein Auto – zum Selbsteinbau",
+        "text": "<p>LED-Lichtsets für den Innenraum – universell einsetzbar in Fahrzeugen mit passenden Schlitzen.</p>",
+        "button_label": "Lichtsets entdecken",
+        "button_link": "/collections/all",
+        "button_secondary_label": "Einbau & Kompatibilität",
+        "button_secondary_link": ""
+      }
+    },
+    "trust_bar": {
+      "type": "trust-bar",
+      "blocks": {
+        "shipping": {
+          "type": "shipping",
+          "settings": {
+            "text": "Innerhalb Deutschlands"
+          }
+        },
+        "withdrawal": {
+          "type": "item",
+          "settings": {
+            "icon": "return",
+            "title": "14 Tage Widerrufsrecht",
+            "text": "Gesetzliches Widerrufsrecht für Verbraucher"
+          }
+        },
+        "countries": {
+          "type": "item",
+          "settings": {
+            "icon": "car",
+            "title": "Lieferung nach DE, AT & CH",
+            "text": "[PLATZHALTER] Lieferzeiten folgen"
+          }
+        },
+        "payment": {
+          "type": "payment",
+          "settings": {
+            "title": "Sichere Zahlung",
+            "max_icons": 5
+          }
+        }
+      },
+      "block_order": ["shipping", "withdrawal", "countries", "payment"],
+      "settings": {
+        "color_scheme": "scheme-2"
+      }
+    },
+    "bestseller": {
+      "type": "featured-collection",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "eyebrow": "Bestseller",
+        "heading": "Beliebte Ambiente-Lichtsets",
+        "view_all_label": "Alle ansehen",
+        "collection": "bestseller",
+        "products_to_show": 4,
+        "show_placeholders": true,
+        "columns_desktop": "4",
+        "columns_mobile": "2",
+        "image_ratio": "1 / 1",
+        "show_secondary_image": true,
+        "show_quick_add": true
+      }
+    },
+    "benefits": {
+      "type": "benefits",
+      "blocks": {
+        "universal": {
+          "type": "benefit",
+          "settings": {
+            "icon": "car",
+            "title": "Universell einsetzbar",
+            "text": "<p>Passt in Fahrzeuge mit passenden Schlitzen. Bitte vor dem Einbau Maß und Anbringungsort prüfen.</p>"
+          }
+        },
+        "diy": {
+          "type": "benefit",
+          "settings": {
+            "icon": "wrench",
+            "title": "Zum Selbsteinbau",
+            "text": "<p>[PLATZHALTER] Beschreibe, was den Einbau einfach macht – nur belegbare Aussagen.</p>"
+          }
+        },
+        "colors": {
+          "type": "benefit",
+          "settings": {
+            "icon": "palette",
+            "title": "Lichtfarben nach Wahl",
+            "text": "<p>Verschiedene Lichtfarben, z. B. Warmweiß, Kaltweiß oder mehrfarbig (RGB). [PLATZHALTER: an das Sortiment anpassen]</p>"
+          }
+        },
+        "quality": {
+          "type": "benefit",
+          "settings": {
+            "icon": "shield-check",
+            "title": "[PLATZHALTER] Qualität & Sicherheit",
+            "text": "<p>[PLATZHALTER] z. B. Angaben zur CE-Kennzeichnung – nur verwenden, wenn belegt.</p>"
+          }
+        }
+      },
+      "block_order": ["universal", "diy", "colors", "quality"],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "eyebrow": "Vorteile",
+        "heading": "Warum carbiente?",
+        "heading_alignment": "left"
+      }
+    },
+    "how_it_works": {
+      "type": "how-it-works",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "icon": "ruler",
+            "title": "Maß und Anbringungsort prüfen",
+            "text": "<p>Prüfe, ob dein Fahrzeug passende Schlitze hat, und miss die gewünschte Länge aus.</p>"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "icon": "palette",
+            "title": "Set und Lichtfarbe wählen",
+            "text": "<p>Wähle das passende Set und deine Lichtfarbe. [PLATZHALTER: Hinweis zu Längen und Varianten]</p>"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "icon": "wrench",
+            "title": "Selbst einbauen",
+            "text": "<p>[PLATZHALTER] Beschreibe kurz, wie der Einbau abläuft und was dafür benötigt wird.</p>"
+          }
+        }
+      },
+      "block_order": ["step_1", "step_2", "step_3"],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "glow": true,
+        "eyebrow": "So funktioniert’s",
+        "heading": "In drei Schritten zu deinem Ambientelicht",
+        "button_label": "Einbau & Kompatibilität",
+        "button_link": ""
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "color_scheme": "scheme-3",
+        "image_ratio": "4 / 5",
+        "image_position": "left",
+        "eyebrow": "Unsere Idee",
+        "heading": "Licht, das zu deinem Auto passt",
+        "text": "<p>[PLATZHALTER] Erzähle hier die Geschichte hinter carbiente: Warum ihr Ambientebeleuchtung zum Selbsteinbau anbietet und was euch dabei wichtig ist.</p>",
+        "button_label": "Mehr über uns",
+        "button_link": ""
+      }
+    },
+    "social_proof": {
+      "type": "social-proof",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme-1",
+        "heading": "Das sagen unsere Kundinnen und Kunden"
+      }
+    },
+    "collections": {
+      "type": "collection-list",
+      "blocks": {
+        "ambient": {
+          "type": "collection",
+          "settings": {
+            "collection": "ambientebeleuchtung",
+            "title": "Ambientebeleuchtung"
+          }
+        },
+        "accessories": {
+          "type": "collection",
+          "settings": {
+            "collection": "zubehoer-ersatzteile",
+            "title": "Zubehör & Ersatzteile"
+          }
+        },
+        "bundles": {
+          "type": "collection",
+          "settings": {
+            "collection": "sets-bundles",
+            "title": "Sets & Bundles"
+          }
+        }
+      },
+      "block_order": ["ambient", "accessories", "bundles"],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "eyebrow": "Kategorien",
+        "heading": "Finde das passende Set",
+        "show_placeholders": true
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q_fit": {
+          "type": "question",
+          "settings": {
+            "question": "Passt die Ambientebeleuchtung in mein Auto?",
+            "answer": "<p>Unsere Lichtsets sind universell einsetzbar und passen in Fahrzeuge mit passenden Schlitzen. Bitte prüfe vor dem Einbau Maß und Anbringungsort.</p>"
+          }
+        },
+        "q_diy": {
+          "type": "question",
+          "settings": {
+            "question": "Kann ich die Ambientebeleuchtung selbst einbauen?",
+            "answer": "<p>[PLATZHALTER] Antwort folgt – z. B. benötigtes Werkzeug, Zeitaufwand und Hinweise zum Anschluss.</p>"
+          }
+        },
+        "q_color": {
+          "type": "question",
+          "settings": {
+            "question": "Welche Lichtfarbe passt zu meinem Auto?",
+            "answer": "<p>[PLATZHALTER] Antwort folgt – z. B. Unterschiede zwischen Warmweiß, Kaltweiß und mehrfarbig (RGB).</p>"
+          }
+        },
+        "q_power": {
+          "type": "question",
+          "settings": {
+            "question": "Wie wird die Beleuchtung mit Strom versorgt?",
+            "answer": "<p>[PLATZHALTER] Antwort folgt – Angaben zur Stromversorgung bitte aus den Produktunterlagen übernehmen.</p>"
+          }
+        },
+        "q_shipping": {
+          "type": "question",
+          "settings": {
+            "question": "Was kostet der Versand?",
+            "answer": "<p>Innerhalb Deutschlands liefern wir ab 50 € Bestellwert versandkostenfrei. Darunter fallen Versandkosten an, die dir im Checkout angezeigt werden. Wir liefern außerdem nach Österreich und in die Schweiz. [PLATZHALTER: Versandkosten für AT/CH und Hinweis zu möglichen Zoll- und Einfuhrabgaben in der Schweiz]</p>"
+          }
+        },
+        "q_withdrawal": {
+          "type": "question",
+          "settings": {
+            "question": "Kann ich meine Bestellung widerrufen?",
+            "answer": "<p>Ja. Als Verbraucherin oder Verbraucher hast du ein gesetzliches Widerrufsrecht von 14 Tagen. Alle Details findest du in unserer Widerrufsbelehrung.</p>"
+          }
+        }
+      },
+      "block_order": ["q_fit", "q_diy", "q_color", "q_power", "q_shipping", "q_withdrawal"],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "eyebrow": "FAQ",
+        "heading": "Häufige Fragen zur Ambientebeleuchtung",
+        "link_label": "Alle Fragen ansehen",
+        "link_url": ""
+      }
+    },
+    "blog_posts": {
+      "type": "blog-posts",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme-1",
+        "eyebrow": "Ratgeber",
+        "heading": "Wissen rund um Ambientebeleuchtung",
+        "post_limit": 3,
+        "view_all_label": "Zum Ratgeber"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "eyebrow": "Newsletter",
+        "heading": "Neuheiten & Einbau-Tipps per E-Mail",
+        "text": "<p>Erfahre als Erstes von neuen Lichtsets und erhalte praktische Tipps rund um Einbau und Pflege. [PLATZHALTER: Anreiz folgt]</p>",
+        "success_message": "Fast geschafft! Bitte bestätige deine Anmeldung über den Link in der E-Mail, die wir dir gerade geschickt haben."
+      }
+    },
+    "final_cta": {
+      "type": "cta-banner",
+      "settings": {
+        "color_scheme": "scheme-3",
+        "glow": true,
+        "heading": "Bereit für dein neues Lichtgefühl?",
+        "text": "<p>Entdecke unsere Ambiente-Lichtsets für den Selbsteinbau.</p>",
+        "button_label": "Jetzt Lichtsets entdecken",
+        "button_link": "/collections/all"
+      }
     }
   },
-  "order": ["styleguide"]
+  "order": [
+    "hero",
+    "trust_bar",
+    "bestseller",
+    "benefits",
+    "how_it_works",
+    "story",
+    "social_proof",
+    "collections",
+    "faq",
+    "blog_posts",
+    "newsletter",
+    "final_cta"
+  ]
 }

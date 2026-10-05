@@ -1,0 +1,164 @@
+{% comment %}
+  Newsletter sign-up via Shopify's customer form (no third-party script).
+  Recommended: enable double opt-in under Settings → Customer privacy /
+  Marketing. The consent note links to the privacy policy.
+{% endcomment %}
+
+{%- liquid
+  assign heading_id = 'Heading-' | append: section.id
+  assign form_id = 'Newsletter-' | append: section.id
+-%}
+
+<div class="section color-{{ section.settings.color_scheme }}">
+  <div class="page-width page-width--narrow">
+    <div class="newsletter text-center stack" style="--stack-space: var(--space-5);" role="region" aria-labelledby="{{ heading_id }}">
+      <span class="newsletter__icon">{% render 'icon', name: 'mail' %}</span>
+      {% render 'section-heading',
+        eyebrow: section.settings.eyebrow,
+        heading: section.settings.heading,
+        text: section.settings.text,
+        align: 'center',
+        id: heading_id
+      %}
+
+      {%- form 'customer', id: form_id, class: 'newsletter__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="hidden" name="contact[accepts_marketing]" value="true">
+
+        {%- if form.posted_successfully? -%}
+          <p class="form-message form-message--success" role="status" tabindex="-1" autofocus>
+            {{ section.settings.success_message }}
+          </p>
+        {%- else -%}
+          <div class="newsletter__fields">
+            <div class="field newsletter__field">
+              <label for="{{ form_id }}-email">{{ 'newsletter.label' | t }}</label>
+              <input
+                id="{{ form_id }}-email"
+                type="email"
+                name="contact[email]"
+                value="{{ form.email }}"
+                autocomplete="email"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                required
+                {% if form.errors %}
+                  aria-invalid="true" aria-describedby="{{ form_id }}-error"
+                {% endif %}
+              >
+            </div>
+            <button type="submit" class="button newsletter__button">{{ 'newsletter.submit' | t }}</button>
+          </div>
+
+          {%- if form.errors -%}
+            <p id="{{ form_id }}-error" class="field__error newsletter__error" role="alert">
+              {% render 'icon', name: 'alert' %}
+              <span>{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</span>
+            </p>
+          {%- endif -%}
+        {%- endif -%}
+
+        <p class="newsletter__consent text-small text-muted">
+          {%- capture privacy_link -%}
+            <a href="{{ shop.privacy_policy.url | default: '/policies/privacy-policy' }}">{{ 'newsletter.privacy_policy' | t }}</a>
+          {%- endcapture -%}
+          {{ 'newsletter.consent_html' | t: link: privacy_link }}
+        </p>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .newsletter {
+    display: grid;
+    justify-items: center;
+  }
+
+  .newsletter .section-heading {
+    margin-block-end: 0;
+  }
+
+  .newsletter__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    color: var(--color-accent);
+  }
+
+  .newsletter__form {
+    display: grid;
+    gap: var(--space-4);
+    width: 100%;
+    max-width: 32rem;
+  }
+
+  .newsletter__fields {
+    display: grid;
+    gap: var(--space-3);
+    text-align: start;
+  }
+
+  .newsletter__error {
+    justify-content: center;
+  }
+
+  @media (min-width: 750px) {
+    .newsletter__fields {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.newsletter.name",
+  "class": "section-newsletter",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.newsletter.info"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:common.eyebrow",
+      "default": "Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:common.heading",
+      "default": "Neuheiten & Einbau-Tipps per E-Mail"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:common.text",
+      "default": "<p>Erfahre als Erstes von neuen Lichtsets und erhalte praktische Tipps rund um Einbau und Pflege. [PLATZHALTER: Anreiz folgt]</p>"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "t:sections.newsletter.success_message",
+      "default": "Fast geschafft! Bitte bestätige deine Anmeldung über den Link in der E-Mail, die wir dir gerade geschickt haben."
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.newsletter.name"
+    }
+  ]
+}
+{% endschema %}

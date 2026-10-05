@@ -1,0 +1,143 @@
+{% comment %}
+  Ratgeber teaser: latest articles of the selected blog.
+  Renders nothing while the blog is missing or has no articles.
+{% endcomment %}
+
+{%- liquid
+  assign blog = section.settings.blog
+  assign heading_id = 'Heading-' | append: section.id
+-%}
+
+{%- if blog != blank and blog.articles_count > 0 -%}
+  <div class="section color-{{ section.settings.color_scheme }}">
+    <div class="page-width" role="region" aria-labelledby="{{ heading_id }}">
+      {% render 'section-heading',
+        eyebrow: section.settings.eyebrow,
+        heading: section.settings.heading,
+        text: section.settings.text,
+        link_label: section.settings.view_all_label,
+        link_url: blog.url,
+        id: heading_id
+      %}
+
+      <ul class="grid" role="list" style="--cols-mobile: 1; --cols-tablet: 2; --cols-desktop: 3;">
+        {%- for article in blog.articles limit: section.settings.post_limit -%}
+          <li class="article-card reveal">
+            {% render 'image',
+              image: article.image,
+              alt: '',
+              ratio: '3 / 2',
+              sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw',
+              max_width: 900,
+              widths: '375, 550, 750, 900',
+              placeholder: 'lifestyle-1'
+            %}
+            <div class="article-card__info stack" style="--stack-space: var(--space-2);">
+              <p class="text-small text-muted">{{ article.published_at | time_tag: format: 'date' }}</p>
+              <h3 class="h4"><a class="article-card__link" href="{{ article.url }}">{{ article.title }}</a></h3>
+              {%- if article.excerpt != blank -%}
+                <p class="text-muted text-small">{{ article.excerpt | strip_html | truncatewords: 22 }}</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+{%- elsif request.design_mode -%}
+  <div class="page-width section">
+    <p class="text-muted text-small">{{ 'sections.blog_posts.empty_hint' | t }}</p>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .article-card {
+    position: relative;
+    display: grid;
+    gap: var(--space-4);
+    align-content: start;
+  }
+
+  .article-card__link {
+    text-decoration: none;
+  }
+
+  .article-card__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .article-card__link:focus-visible {
+    outline: none;
+  }
+
+  .article-card__link:focus-visible::after {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-m);
+  }
+
+  @media (hover: hover) {
+    .article-card:hover .article-card__link {
+      text-decoration: underline;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.blog_posts.name",
+  "class": "section-blog-posts",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:settings.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:common.eyebrow",
+      "default": "Ratgeber"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:common.heading",
+      "default": "Wissen rund um Ambientebeleuchtung"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:common.text"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "t:sections.blog_posts.blog"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "t:sections.blog_posts.post_limit",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "t:common.link_label",
+      "default": "Zum Ratgeber"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.blog_posts.name"
+    }
+  ]
+}
+{% endschema %}

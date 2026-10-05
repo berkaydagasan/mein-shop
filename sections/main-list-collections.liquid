@@ -7,7 +7,7 @@
 
   <ul class="grid" role="list" style="--cols-mobile: 1; --cols-tablet: 2; --cols-desktop: 3;">
     {%- for collection in collections -%}
-      <li class="collection-tile stack" style="--stack-space: var(--space-3);">
+      <li class="collections-overview__item stack" style="--stack-space: var(--space-3);">
         {% render 'image',
           image: collection.featured_image,
           url: collection.url,

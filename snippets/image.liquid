@@ -19,6 +19,7 @@
   @param {string} [fit] - 'cover' (default) or 'contain' (packshots)
   @param {boolean} [lcp] - Load eagerly with high priority and preload
   @param {string} [placeholder] - Placeholder SVG name, e.g. 'product-1', 'lifestyle-1'. Default: 'image'
+  @param {boolean} [show_placeholder_label] - Show the "Platzhalterbild" label on placeholders. Default: true
 
   @example
   {% render 'image', image: product.featured_image, ratio: '1 / 1', fit: 'contain', sizes: '(min-width: 990px) 25vw, 50vw' %}
@@ -79,6 +80,8 @@
     }}
   {%- else -%}
     {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
-    <span class="badge badge--muted placeholder-label">{{ 'general.placeholder_image' | t }}</span>
+    {%- unless show_placeholder_label == false -%}
+      <span class="badge badge--muted placeholder-label">{{ 'general.placeholder_image' | t }}</span>
+    {%- endunless -%}
   {%- endif -%}
 </{{ wrapper }}>

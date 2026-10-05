@@ -63,9 +63,32 @@
   },
   "collections": {
     "title": "Kollektionen",
-    "empty": "Diese Kollektion enthält noch keine Produkte.",
     "explore": "Entdecken",
-    "placeholder_title": "[PLATZHALTER] Kollektion"
+    "placeholder_title": "[PLATZHALTER] Kollektion",
+    "filter": "Filter",
+    "active": "aktiv",
+    "close_filters": "Filter schließen",
+    "product_count": {
+      "one": "{{ count }} Produkt",
+      "other": "{{ count }} Produkte"
+    },
+    "sort_by": "Sortieren nach",
+    "sort_submit": "Sortieren",
+    "active_filters": "Aktive Filter",
+    "remove_filter": "Filter entfernen",
+    "clear_all": "Alle Filter entfernen",
+    "price_from": "Von",
+    "price_to": "Bis",
+    "apply": "Filter anwenden",
+    "products_heading": "Produkte",
+    "empty_filtered": "Keine Produkte entsprechen deinen Filtern.",
+    "empty_title": "In dieser Kollektion sind noch keine Produkte.",
+    "empty_text": "Schau dich gern in unseren anderen Bereichen um.",
+    "view_all_products": "Alle Produkte ansehen",
+    "back_home": "Zur Startseite",
+    "apply_price": "Preis anwenden",
+    "empty_page": "Auf dieser Seite gibt es keine Produkte.",
+    "first_page": "Zur ersten Seite"
   },
   "search": {
     "title": "Suche",
@@ -149,5 +172,14 @@
     "blog_posts": {
       "empty_hint": "Hinweis (nur im Editor sichtbar): Wähle einen Blog mit veröffentlichten Artikeln. Bis dahin bleibt diese Section unsichtbar."
     }
+  },
+  "breadcrumbs": {
+    "label": "Pfadnavigation",
+    "home": "Startseite"
+  },
+  "pagination": {
+    "previous": "Vorherige Seite",
+    "next": "Nächste Seite",
+    "page": "Seite"
   }
 }

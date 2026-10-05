@@ -1,0 +1,124 @@
+{% doc %}
+  Renders the breadcrumb trail for the current page and the matching
+  BreadcrumbList structured data (JSON-LD). The last item is the current
+  page (aria-current="page", not linked).
+
+  Supported page types: collection, product (with collection context),
+  page, blog, article, search, list-collections.
+
+  @example
+  {% render 'breadcrumbs' %}
+{% enddoc %}
+
+{%- liquid
+  assign sep = '::|::'
+  assign names = 'breadcrumbs.home' | t
+  assign urls = routes.root_url
+
+  case request.page_type
+    when 'collection'
+      assign names = names | append: sep | append: collection.title
+      assign urls = urls | append: sep | append: collection.url
+    when 'product'
+      if collection
+        assign names = names | append: sep | append: collection.title
+        assign urls = urls | append: sep | append: collection.url
+      endif
+      assign names = names | append: sep | append: product.title
+      assign urls = urls | append: sep | append: product.url
+    when 'page'
+      assign names = names | append: sep | append: page.title
+      assign urls = urls | append: sep | append: page.url
+    when 'blog'
+      assign names = names | append: sep | append: blog.title
+      assign urls = urls | append: sep | append: blog.url
+    when 'article'
+      assign names = names | append: sep | append: blog.title | append: sep | append: article.title
+      assign urls = urls | append: sep | append: blog.url | append: sep | append: article.url
+    when 'search'
+      assign label = 'search.title' | t
+      assign names = names | append: sep | append: label
+      assign urls = urls | append: sep | append: routes.search_url
+    when 'list-collections'
+      assign label = 'collections.title' | t
+      assign names = names | append: sep | append: label
+      assign urls = urls | append: sep | append: routes.collections_url
+  endcase
+
+  assign names = names | split: sep
+  assign urls = urls | split: sep
+-%}
+
+{%- if names.size > 1 -%}
+  <nav class="breadcrumbs" aria-label="{{ 'breadcrumbs.label' | t }}">
+    <ol class="breadcrumbs__list" role="list">
+      {%- for name in names -%}
+        <li class="breadcrumbs__item">
+          {%- if forloop.last -%}
+            <span aria-current="page">{{ name | escape }}</span>
+          {%- else -%}
+            <a class="breadcrumbs__link" href="{{ urls[forloop.index0] }}">{{ name | escape }}</a>
+            {% render 'icon', name: 'chevron-right', class: 'breadcrumbs__separator' %}
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ol>
+  </nav>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {%- for name in names -%}
+          {
+            "@type": "ListItem",
+            "position": {{ forloop.index }},
+            "name": {{ name | json }},
+            "item": {{ request.origin | append: urls[forloop.index0] | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: var(--fs-small);
+    color: var(--color-text-muted);
+  }
+
+  .breadcrumbs__item {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  .breadcrumbs__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-target);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .breadcrumbs__link:hover {
+      text-decoration: underline;
+      color: var(--color-text);
+    }
+  }
+
+  .breadcrumbs__separator {
+    --icon-size: 1rem;
+    margin-inline: var(--space-1);
+  }
+
+  .breadcrumbs [aria-current='page'] {
+    color: var(--color-text);
+    overflow-wrap: anywhere;
+  }
+{% endstylesheet %}

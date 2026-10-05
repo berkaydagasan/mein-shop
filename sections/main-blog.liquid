@@ -28,11 +28,7 @@
       {%- endfor -%}
     </ul>
 
-    {%- if paginate.pages > 1 -%}
-      <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
-        {{- paginate | default_pagination -}}
-      </nav>
-    {%- endif -%}
+    {% render 'pagination', paginate: paginate %}
   {%- endpaginate -%}
 </div>
 

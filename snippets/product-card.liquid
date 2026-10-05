@@ -13,6 +13,7 @@
   @param {boolean} [show_secondary_image] - Second image on hover (desktop)
   @param {boolean} [show_quick_add] - Add-to-cart button for single-variant products
   @param {number} [placeholder_index] - 1–6, varies the placeholder illustration
+  @param {boolean} [lcp] - Load the card image eagerly with high priority (first card above the fold only)
 
   @example
   {% render 'product-card', product: product, sizes: '(min-width: 990px) 25vw, 50vw', show_quick_add: true %}
@@ -27,6 +28,18 @@
 {%- if product != blank -%}
   {%- liquid
     assign variant = product.selected_or_first_available_variant
+
+    # Sale badge must refer to the same (cheapest) variant as the displayed price
+    assign price_variant = variant
+    if product.price_varies
+      for candidate in product.variants
+        if candidate.price == product.price
+          assign price_variant = candidate
+          break
+        endif
+      endfor
+    endif
+
     assign secondary_image = false
     if show_secondary_image and product.images.size > 1
       assign secondary_image = product.images[1]
@@ -42,7 +55,9 @@
         sizes: sizes,
         max_width: 800,
         widths: card_widths,
-        placeholder: 'product-1'
+        placeholder: 'product-1',
+        show_placeholder_label: false,
+        lcp: lcp
       %}
       {%- if secondary_image -%}
         {% render 'image',
@@ -60,7 +75,7 @@
       <div class="product-card__badges">
         {%- if product.available == false -%}
           <span class="badge badge--muted">{{ 'products.sold_out' | t }}</span>
-        {%- elsif product.compare_at_price > product.price -%}
+        {%- elsif price_variant.compare_at_price > price_variant.price -%}
           <span class="badge badge--sale">{{ 'products.badge_sale' | t }}</span>
         {%- endif -%}
         {%- if product.tags contains 'neu' -%}
@@ -82,7 +97,7 @@
 
       {%- if show_quick_add -%}
         <div class="product-card__actions">
-          {%- if product.has_only_default_variant and product.available -%}
+          {%- if product.has_only_default_variant and product.available and product.requires_selling_plan == false -%}
             {%- form 'product', product -%}
               <input type="hidden" name="id" value="{{ variant.id }}">
               <button type="submit" name="add" class="button button--secondary button--full product-card__button">

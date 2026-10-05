@@ -68,7 +68,9 @@
       "info": "These values only control what the theme displays. Actual shipping rates are set in Settings → Shipping and delivery – keep both in sync.",
       "threshold": "Free shipping from (EUR)",
       "threshold_info": "Currently applies to Germany only.",
-      "countries_note": "Delivery countries note"
+      "countries_note": "Delivery countries note",
+      "info_url": "Shipping information page",
+      "info_url_info": "Linked from \"plus shipping\", e.g. /pages/versand-zahlung. Leave empty to link the shipping policy."
     }
   },
   "sections": {
@@ -104,7 +106,22 @@
       "name": "Product page"
     },
     "main_collection": {
-      "name": "Collection"
+      "name": "Collection",
+      "show_description": "Show collection description",
+      "show_description_info": "Text from the collection's description field in the admin.",
+      "products_per_page": "Products per page",
+      "filtering": "Filtering and sorting",
+      "enable_filtering": "Show filters",
+      "enable_filtering_info": "Set up filters in the \"Shopify Search & Discovery\" app. Without filters no filter button is shown.",
+      "filter_layout": "Filters on desktop",
+      "filter_layout_sidebar": "Sidebar",
+      "filter_layout_drawer": "Drawer",
+      "enable_sorting": "Show sorting",
+      "content": "Content",
+      "fallback_collection": "Main collection for empty collections",
+      "fallback_collection_info": "Linked when a collection has no products yet.",
+      "seo_text": "SEO text below products (default)",
+      "seo_text_info": "Maintain per collection via the metafield custom.seo_text (rich text). This default applies to all collections without the metafield – leave empty to avoid duplicate content."
     },
     "main_list_collections": {
       "name": "Collections list"

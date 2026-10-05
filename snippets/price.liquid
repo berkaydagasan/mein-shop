@@ -1,13 +1,18 @@
 {% doc %}
-  Renders a product price according to German price display rules:
-  "ab" price when variants differ, sale price with struck-through
-  compare-at price (screen-reader labelled), unit price (Grundpreis, PAngV)
-  when set on the variant, and an optional tax/shipping note.
+  Renders a product price according to German price display rules. All
+  values come from ONE variant so they always belong together:
+  - the passed variant, otherwise the cheapest variant ("ab" price when
+    variant prices differ)
+  - sale price with that variant's struck-through compare-at price
+    (screen-reader labelled)
+  - that variant's unit price (Grundpreis, PAngV) when set
+  - an optional tax/shipping note
 
   Note: only use compare-at prices that comply with § 11 PAngV
   (lowest price of the last 30 days).
 
   @param {product} product - The product
+  @param {variant} [variant] - Variant to show; defaults to the cheapest variant
   @param {boolean} [show_tax_note] - Show "inkl. MwSt., zzgl. Versand" below the price
   @param {string} [class] - Additional classes
 
@@ -16,13 +21,26 @@
 {% enddoc %}
 
 {%- liquid
-  assign variant = product.selected_or_first_available_variant
+  assign price_variant = variant
+  if price_variant == blank
+    assign price_variant = product.selected_or_first_available_variant
+    if product.price_varies
+      for candidate in product.variants
+        if candidate.price == product.price
+          assign price_variant = candidate
+          break
+        endif
+      endfor
+    endif
+  endif
+
   assign on_sale = false
-  if product.compare_at_price > product.price
+  if price_variant.compare_at_price > price_variant.price
     assign on_sale = true
   endif
-  assign price = product.price | money
-  if product.price_varies
+
+  assign price = price_variant.price | money
+  if product.price_varies and variant == blank
     assign price = 'products.price_from' | t: price: price
   endif
 -%}
@@ -33,21 +51,21 @@
       <span class="visually-hidden">{{ 'products.sale_price' | t }}</span>
       <span class="price__current">{{ price }}</span>
       <span class="visually-hidden">{{ 'products.regular_price' | t }}</span>
-      <s class="price__compare">{{ product.compare_at_price | money }}</s>
+      <s class="price__compare">{{ price_variant.compare_at_price | money }}</s>
     {%- else -%}
       <span class="price__current">{{ price }}</span>
     {%- endif -%}
   </p>
 
-  {%- if variant.unit_price_measurement -%}
+  {%- if price_variant.unit_price_measurement -%}
     <p class="price__unit">
       <span class="visually-hidden">{{ 'products.unit_price' | t }}</span>
-      {{ variant.unit_price | money }}
+      {{ price_variant.unit_price | money }}
       /
-      {%- if variant.unit_price_measurement.reference_value != 1 -%}
-        {{ variant.unit_price_measurement.reference_value }}
+      {%- if price_variant.unit_price_measurement.reference_value != 1 -%}
+        {{ price_variant.unit_price_measurement.reference_value }}
       {%- endif %}
-      {{ variant.unit_price_measurement.reference_unit }}
+      {{ price_variant.unit_price_measurement.reference_unit }}
     </p>
   {%- endif -%}
 

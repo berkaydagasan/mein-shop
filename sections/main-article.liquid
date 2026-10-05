@@ -29,11 +29,7 @@
           </div>
         {%- endfor -%}
 
-        {%- if paginate.pages > 1 -%}
-          <nav class="pagination" aria-label="{{ 'accessibility.pagination' | t }}">
-            {{- paginate | default_pagination: anchor: 'comments' -}}
-          </nav>
-        {%- endif -%}
+        {% render 'pagination', paginate: paginate, anchor: '#comments' %}
       {%- endpaginate -%}
 
       {%- form 'new_comment', article, class: 'stack' -%}

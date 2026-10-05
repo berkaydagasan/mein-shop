@@ -279,6 +279,12 @@
         "default": 50
       },
       {
+        "type": "url",
+        "id": "shipping_info_url",
+        "label": "t:settings.shipping.info_url",
+        "info": "t:settings.shipping.info_url_info"
+      },
+      {
         "type": "text",
         "id": "shipping_countries_note",
         "label": "t:settings.shipping.countries_note",

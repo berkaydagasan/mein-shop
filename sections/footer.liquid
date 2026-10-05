@@ -142,9 +142,10 @@
 
       <div class="site-footer__meta text-small text-muted">
         <p>
-          {%- if shop.shipping_policy.url != blank -%}
+          {%- assign shipping_url = settings.shipping_info_url | default: shop.shipping_policy.url -%}
+          {%- if shipping_url != blank -%}
             {%- capture shipping_link -%}
-              <a href="{{ shop.shipping_policy.url }}">{{ 'footer.shipping_costs' | t }}</a>
+              <a href="{{ shipping_url }}">{{ 'footer.shipping_costs' | t }}</a>
             {%- endcapture -%}
             {{ 'footer.price_note_html' | t: link: shipping_link }}
           {%- else -%}

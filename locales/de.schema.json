@@ -68,7 +68,9 @@
       "info": "Diese Werte steuern nur die Anzeige im Theme. Die tatsächlichen Versandkosten legst du unter Einstellungen → Versand und Zustellung fest – bitte beide Stellen synchron halten.",
       "threshold": "Gratisversand ab (EUR)",
       "threshold_info": "Gilt aktuell nur für Deutschland.",
-      "countries_note": "Hinweis Lieferländer"
+      "countries_note": "Hinweis Lieferländer",
+      "info_url": "Seite mit Versandinformationen",
+      "info_url_info": "Wird bei „zzgl. Versandkosten“ verlinkt, z. B. /pages/versand-zahlung. Leer lassen, um die Versandrichtlinie zu verlinken."
     }
   },
   "sections": {
@@ -104,7 +106,22 @@
       "name": "Produktseite"
     },
     "main_collection": {
-      "name": "Kollektion"
+      "name": "Kollektion",
+      "show_description": "Kollektionsbeschreibung oben anzeigen",
+      "show_description_info": "Text aus dem Feld „Beschreibung“ der Kollektion im Admin.",
+      "products_per_page": "Produkte pro Seite",
+      "filtering": "Filter und Sortierung",
+      "enable_filtering": "Filter anzeigen",
+      "enable_filtering_info": "Filter richtest du in der App „Shopify Search & Discovery“ ein. Ohne eingerichtete Filter wird kein Filter-Button angezeigt.",
+      "filter_layout": "Filter auf dem Desktop",
+      "filter_layout_sidebar": "Seitenleiste",
+      "filter_layout_drawer": "Ausklappbares Menü",
+      "enable_sorting": "Sortierung anzeigen",
+      "content": "Inhalte",
+      "fallback_collection": "Hauptkollektion für leere Kollektionen",
+      "fallback_collection_info": "Wird als Link angezeigt, wenn eine Kollektion noch keine Produkte enthält.",
+      "seo_text": "SEO-Text unter den Produkten (Standard)",
+      "seo_text_info": "Pro Kollektion über das Metafield custom.seo_text (Rich Text) pflegen. Dieser Standard gilt für alle Kollektionen ohne Metafield – leer lassen empfohlen, um doppelte Inhalte zu vermeiden."
     },
     "main_list_collections": {
       "name": "Kollektionsübersicht"

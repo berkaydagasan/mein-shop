@@ -42,9 +42,10 @@
           {%- endif -%}
         </p>
         <p class="text-small text-muted">
-          {%- if shop.shipping_policy.url != blank -%}
+          {%- assign shipping_url = settings.shipping_info_url | default: shop.shipping_policy.url -%}
+          {%- if shipping_url != blank -%}
             {%- capture shipping_link -%}
-              <a href="{{ shop.shipping_policy.url }}">{{ 'products.shipping_costs' | t }}</a>
+              <a href="{{ shipping_url }}">{{ 'products.shipping_costs' | t }}</a>
             {%- endcapture -%}
             {{ 'products.tax_note_html' | t: link: shipping_link }}
           {%- else -%}

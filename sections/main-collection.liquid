@@ -9,7 +9,10 @@
     submit it. With JavaScript, desktop changes submit automatically; in the
     mobile drawer the "apply" button submits.
   - The filter <dialog> is a modal drawer on mobile and a static sidebar
-    from 990px (CSS only). It opens via invoker commands without JS.
+    from 990px (CSS only). It opens via invoker commands (command/commandfor);
+    browsers without invoker support rely on the polyfill in header.liquid.
+    Without JavaScript the filters render inline above the grid
+    (@media (scripting: none)), so they stay reachable everywhere.
   - Without configured filters, no filter UI is rendered at all.
 {% endcomment %}
 
@@ -47,14 +50,14 @@
     assign clear_url = collection.url | append: '?sort_by=' | append: collection.sort_by
   endif
 
-  assign shipping_url = settings.shipping_info_url | default: shop.shipping_policy.url
-
-  case section.settings.columns_desktop
-    when '3'
-      assign card_sizes = '(min-width: 1200px) 25vw, (min-width: 750px) 33vw, 50vw'
-    else
-      assign card_sizes = '(min-width: 1200px) 20vw, (min-width: 750px) 33vw, 50vw'
-  endcase
+  # Image sizes follow the real card width: page width minus gutters, sidebar and gaps
+  assign page_px = settings.page_width | remove: 'rem' | times: 16 | plus: 80
+  assign cols_desktop = section.settings.columns_desktop
+  if filters_enabled and section.settings.filter_layout == 'sidebar'
+    assign card_sizes = '(min-width: 1184px) calc((min(100vw, ' | append: page_px | append: 'px) - 456px) / ' | append: cols_desktop | append: '), (min-width: 990px) calc((100vw - 432px) / 3), (min-width: 590px) 33vw, 50vw'
+  else
+    assign card_sizes = '(min-width: 990px) calc((min(100vw, ' | append: page_px | append: 'px) - 152px) / ' | append: cols_desktop | append: '), (min-width: 860px) calc((100vw - 120px) / ' | append: cols_desktop | append: '), (min-width: 590px) 33vw, 50vw'
+  endif
   if section.settings.columns_mobile == '1'
     assign card_sizes = card_sizes | replace: ', 50vw', ', 100vw'
   endif
@@ -282,10 +285,10 @@
                 </div>
 
                 <div class="facets__footer">
+                  <button type="submit" class="button facets__apply">{{ 'collections.apply' | t }}</button>
                   {%- if active_filter_count > 0 -%}
                     <a class="button button--secondary facets__reset" href="{{ clear_url }}">{{ 'collections.clear_all' | t }}</a>
                   {%- endif -%}
-                  <button type="submit" class="button facets__apply">{{ 'collections.apply' | t }}</button>
                 </div>
               {%- endif -%}
             </form>
@@ -316,20 +319,12 @@
                       sizes: card_sizes,
                       show_secondary_image: section.settings.show_secondary_image,
                       show_quick_add: section.settings.show_quick_add,
+                      stage: true,
                       lcp: is_lcp
                     %}
                   </li>
                 {%- endfor -%}
               </ul>
-
-              <p class="collection__price-note text-small text-muted">
-                {%- if shipping_url != blank -%}
-                  {%- capture shipping_link -%}<a href="{{ shipping_url }}">{{ 'footer.shipping_costs' | t }}</a>{%- endcapture -%}
-                  {{ 'footer.price_note_html' | t: link: shipping_link }}
-                {%- else -%}
-                  {{ 'footer.price_note' | t }}
-                {%- endif -%}
-              </p>
 
               {% render 'pagination', paginate: paginate %}
             {%- else -%}
@@ -372,6 +367,17 @@
 </div>
 
 {% stylesheet %}
+  /* Template page: the breadcrumb sits close to the header instead of a full section gap */
+  .section.collection {
+    padding-block-start: var(--space-5);
+  }
+
+  @media (min-width: 990px) {
+    .section.collection {
+      padding-block-start: var(--space-6);
+    }
+  }
+
   .collection .breadcrumbs {
     margin-block-end: var(--space-4);
   }
@@ -396,28 +402,54 @@
   .collection__filter-count {
     display: inline-grid;
     place-items: center;
-    min-width: 1.5rem;
-    height: 1.5rem;
-    padding-inline: 0.375rem;
-    border-radius: 999px;
+    min-width: 1.75rem;
+    height: 1.75rem;
+    padding-inline: var(--space-2);
+    border-radius: var(--radius-button);
     background-color: var(--color-button);
     color: var(--color-button-label);
-    font-size: 0.75rem;
+    font-size: var(--fs-small);
+    line-height: 1;
   }
 
+  /* Mobile: label on its own line, select fills the row next to the submit button */
   .collection__sort {
     display: flex;
+    flex: 1 1 100%;
+    flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
   }
 
   .collection__sort-label {
-    white-space: nowrap;
+    flex-basis: 100%;
   }
 
   .collection__sort select {
-    width: auto;
-    max-width: 14rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .collection__sort-submit {
+    flex: none;
+  }
+
+  @media (min-width: 750px) {
+    .collection__sort {
+      flex: none;
+      flex-wrap: nowrap;
+    }
+
+    .collection__sort-label {
+      flex-basis: auto;
+      white-space: nowrap;
+    }
+
+    .collection__sort select {
+      flex: none;
+      width: auto;
+      max-width: 14rem;
+    }
   }
 
   /* Active filter chips */
@@ -440,7 +472,7 @@
     min-height: var(--touch-target);
     padding-inline: var(--space-4);
     border: var(--border-width) solid var(--color-border-strong);
-    border-radius: 999px;
+    border-radius: var(--radius-button);
     font-size: var(--fs-small);
     text-decoration: none;
   }
@@ -481,14 +513,10 @@
     }
   }
 
-  @container products (min-width: 56rem) {
+  @container products (min-width: 50rem) {
     .collection__grid {
       grid-template-columns: repeat(var(--cols-desktop, 4), minmax(0, 1fr));
     }
-  }
-
-  .collection__price-note {
-    margin-block-start: var(--space-6);
   }
 
   .collection__empty {
@@ -506,7 +534,7 @@
   }
 
   .collection__seo {
-    margin-block-start: var(--space-9);
+    margin-block-start: var(--space-8);
     padding-block-start: var(--space-7);
     border-top: var(--border-width) solid var(--color-border);
     color: var(--color-text-muted);
@@ -543,7 +571,7 @@
   }
 
   .facets::backdrop {
-    background-color: rgb(11 15 20 / 0.55);
+    background-color: var(--color-backdrop);
   }
 
   .facets__form {
@@ -570,14 +598,21 @@
 
   .facets__footer {
     display: flex;
+    flex-direction: column;
     gap: var(--space-3);
     padding: var(--space-4) var(--gutter);
     padding-bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
     border-top: var(--border-width) solid var(--color-border);
   }
 
-  .facets__footer .button {
-    flex: 1;
+  @media (min-width: 750px) {
+    .facets__footer {
+      flex-direction: row;
+    }
+
+    .facets__footer .button {
+      flex: 1;
+    }
   }
 
   .facet {
@@ -633,6 +668,34 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-3);
+  }
+
+  /* Without JavaScript (and so without invoker polyfill): filters render inline */
+  @media (scripting: none) {
+    .collection__filter-button,
+    .facets__close {
+      display: none;
+    }
+
+    .facets:not([open]) {
+      position: static;
+      display: block;
+      width: auto;
+      height: auto;
+      margin-block-end: var(--space-6);
+      transform: none;
+    }
+
+    .facets__header,
+    .facets__groups,
+    .facets__footer {
+      padding-inline: 0;
+    }
+
+    .facets__header {
+      min-height: 0;
+      padding-block-end: var(--space-3);
+    }
   }
 
   /* From 990px the dialog becomes a static sidebar (no modal, no JS needed) */

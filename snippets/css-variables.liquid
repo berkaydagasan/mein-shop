@@ -96,6 +96,13 @@
     --color-stage-edge: #2A3441;
     --color-stage-text: #F2F4F7;
     --color-stage-glow: #3DD5EE;
+  }
+
+  /* Backdrop dim + motion tokens. Also set on ::backdrop itself, which does not
+     inherit custom properties from :root in every supported browser. */
+  :root,
+  ::backdrop {
+    --color-backdrop: rgb(11 15 20 / 0.55);
 
     /* Motion */
     --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);

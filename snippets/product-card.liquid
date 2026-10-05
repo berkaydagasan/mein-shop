@@ -14,15 +14,23 @@
   @param {boolean} [show_quick_add] - Add-to-cart button for single-variant products
   @param {number} [placeholder_index] - 1–6, varies the placeholder illustration
   @param {boolean} [lcp] - Load the card image eagerly with high priority (first card above the fold only)
+  @param {boolean} [stage] - Show images on the dark product stage (.media--stage). Default: false
 
   @example
-  {% render 'product-card', product: product, sizes: '(min-width: 990px) 25vw, 50vw', show_quick_add: true %}
+  {% render 'product-card', product: product, sizes: '(min-width: 990px) 25vw, 50vw', show_quick_add: true, stage: true %}
 {% enddoc %}
 
 {%- liquid
   assign ratio = ratio | default: '1 / 1'
   assign sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
   assign card_widths = '200, 300, 400, 500, 600, 800'
+
+  assign media_class = ''
+  assign secondary_class = 'product-card__secondary'
+  if stage
+    assign media_class = 'media--stage'
+    assign secondary_class = 'product-card__secondary media--stage'
+  endif
 -%}
 
 {%- if product != blank -%}
@@ -45,7 +53,7 @@
       assign secondary_image = product.images[1]
     endif
   -%}
-  <article class="product-card{% if secondary_image %} product-card--has-secondary{% endif %}">
+  <article class="product-card{% if stage %} product-card--stage{% endif %}{% if secondary_image %} product-card--has-secondary{% endif %}">
     <div class="product-card__media">
       {% render 'image',
         image: product.featured_image,
@@ -57,6 +65,7 @@
         widths: card_widths,
         placeholder: 'product-1',
         show_placeholder_label: false,
+        class: media_class,
         lcp: lcp
       %}
       {%- if secondary_image -%}
@@ -68,7 +77,7 @@
           sizes: sizes,
           max_width: 800,
           widths: card_widths,
-          class: 'product-card__secondary'
+          class: secondary_class
         %}
       {%- endif -%}
 
@@ -122,9 +131,9 @@
     endif
     assign placeholder_name = 'product-' | append: placeholder_number
   -%}
-  <article class="product-card product-card--placeholder" aria-label="{{ 'products.placeholder_card' | t }}">
+  <article class="product-card product-card--placeholder{% if stage %} product-card--stage{% endif %}" aria-label="{{ 'products.placeholder_card' | t }}">
     <div class="product-card__media">
-      {% render 'image', image: blank, ratio: ratio, placeholder: placeholder_name %}
+      {% render 'image', image: blank, ratio: ratio, placeholder: placeholder_name, class: media_class %}
     </div>
     <div class="product-card__info">
       <h3 class="product-card__title">{{ 'products.placeholder_title' | t }}</h3>
@@ -174,6 +183,11 @@
   }
 
   .product-card__title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
     font-family: var(--font-body-family);
     font-size: var(--fs-body);
     font-weight: var(--font-body-weight-bold);
@@ -219,6 +233,12 @@
   .product-card__button {
     padding-inline: var(--space-3);
     font-size: var(--fs-small);
+  }
+
+  /* On the dark stage the default badge (text color fill) would vanish: invert it */
+  .product-card--stage .product-card__badges .badge:not(.badge--sale, .badge--muted) {
+    background-color: var(--color-stage-text);
+    color: var(--color-stage);
   }
 
   .product-card--placeholder .product-card__title {
